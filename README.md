@@ -42,6 +42,11 @@ To run on a webpage .. at the console type this ...
 Then open the browser to
 [http://localhost:7070/]
 
+To install for android ...
+ - cd CordovaApp
+ - cordova platform add android
+ - cd .. (to go back)
+
 To run on an android emulator ..
  - ./emulate
 
