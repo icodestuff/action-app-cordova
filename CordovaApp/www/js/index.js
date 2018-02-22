@@ -118,7 +118,7 @@
            
             var tmpPluginComponents = []; //'DataTables'
             //'LayoutPage', 'PouchPage', 'DataTablesPage', 'WorkspacesPage', 'LogsPage'
-            var tmpAppCompsToInit = ['WorkspacesPage', 'LogsPage']; //, 'LogsPage'
+            var tmpAppCompsToInit = ['DashboardPage', 'WorkspacesPage', 'LogsPage']; //, 'LogsPage'
             //var tmpAppCompsToInit = ['PuppetShow', 'LogsPage'];
             var tmpAppComponents = [ ];
 

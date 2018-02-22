@@ -159,7 +159,7 @@
       </div>
   </script>
  
-  <script data-htpl="ws:page-body-menu" type="text/x-htpl">
+  <script data-htpl="dash:page-body" type="text/x-htpl">
     
     <div class="ui container context example">
         <div style="padding-top:10px">
@@ -192,18 +192,32 @@
           <div class="pusher">
             <div class="ui basic segment">
               <h3 class="ui header">Application Content</h3>
-              <div style="min-height:400px;"
+              <div style="min-height:400px;">
               <p></p>
               <p></p>
               <p></p>
               <p></p>
+              </div>
             </div>
           </div>
         </div>
       </div>
       </div>  
   </script>
-  
+  <script data-htpl="dash:page-footer" type="text/x-htpl">
+    <div class="ui middle aligned divided list">
+        <div class="item">
+          <div class="left floated content">
+            <div class="ui button basic blue">Add</div>
+          </div>
+          <div class="content" >
+            <div style="height:35px;overflow:auto;">
+              Dashboard footer
+            </div>
+          </div>
+        </div>
+      </div>
+  </script>
 
 
 
@@ -277,6 +291,7 @@
   <script src="lib/actionapp/actionapp.js"></script>
   <script src="app/app-module.js"></script>
 
+  <script src="app/app-dashboard-page.js"></script>
   <script src="app/app-workspaces-page.js"></script>
   <script src="app/app-logs-page.js"></script>
   
