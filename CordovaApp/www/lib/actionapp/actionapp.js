@@ -9,13 +9,30 @@ License: MIT
  *   
 
 What is an Action?
- - An action is a registered function with a name, so when you say ..
-    "run action doSomethingCool" ... something cool happens.
+ - An action is a registered function with a name that sends to calling object
+   - the calling object contains the params needed for the function
 
- - How do you say "run action"?
-   That is the key to simplicity .. once an action is registered, there are lots of ways to call it.
-   The primary way to call an action is to add an attribute to any element, 
-    ... such as ... <div action="doSomethingCool" >Do it</div>, when clicked, something cool will happen.
+ - Once an action is registered, there are lots of ways to call it.
+
+   The primary way to call an action is to add an attribute to any element with the name "action" 
+    ... such as ... <div action="doSomethingCool">Do it!</div>, when clicked, something cool will happen.
+  
+    How? You create a function called doSomethingCool and do cool stuf there..
+
+    Example:
+    ==================
+    In the HTML you have ... 
+    <button action="doSomethingCool" group="coolStuff" item="fred">Show Fred</button>
+
+    In your page, you add this ...
+    ThisPage.doSomethingCool = function (theAction, theTarget) {
+        var tmpParams = ThisApp.getAttrs(theTarget, ['group', 'item']);
+        //--- returns {group:"coolStuff", item:"fred"}
+        ThisPage.doSomethingElseWithThisAsParams(tmpParams);    
+    }
+
+    Done.
+
 
 Key features: 
   - Action based, which means "actions" are at the core of most "actions"

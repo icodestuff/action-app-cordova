@@ -5,6 +5,34 @@
 * License: MIT
 * 2018
 
+## About Action App  
+
+### What is an Action?
+ - An action is a registered function with a name that sends to calling object
+   - the calling object contains the params needed for the function
+
+ - Once an action is registered, there are lots of ways to call it.
+
+   The primary way to call an action is to add an attribute to any element with the name "action" 
+    ... such as ... <div action="doSomethingCool">Do it!</div>, when clicked, something cool will happen.
+  
+    How? You create a function called doSomethingCool and do cool stuf there..
+
+    Example:
+    ==================
+    In the HTML you have ... 
+    <button action="doSomethingCool" group="coolStuff" item="fred">Show Fred</button>
+
+    In your page, you add this ...
+    ThisPage.doSomethingCool = function (theAction, theTarget) {
+        var tmpParams = ThisApp.getAttrs(theTarget, ['group', 'item']);
+        //--- returns {group:"coolStuff", item:"fred"}
+        ThisPage.doSomethingElseWithThisAsParams(tmpParams);    
+    }
+
+    Done.
+
+
 ## Action Application Demo
 This is a super simple but responsive application that uses the following libraries at the core.
 * jQuery
