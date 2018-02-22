@@ -94,7 +94,7 @@ License: MIT
 
         var tmpBodyHTML = '<div appuse="cards" group="logs:job-tabs" item="' + tmpNewJobID + '" style="border:solid 1px red;">' + tmpNew.title + '</div>';
         ThisApp.addToFacet('logs-jobs', tmpBodyHTML);
-        var tmpTabHTML = '<div group="logs:job-tabs" item="' + tmpNewJobID + '" class="ui item selected nopad noshadow" action="logs:selectTabLink" appuse="tablinks" group="logs:job-tabs" item="' + tmpNewJobID + '" ><a class="ui site-tab-link-body basic button">Tab long long long long long long long long' + ThisPage.jobLogsAt + '</a><a action="logs:closeSelectedTab" class="ui icon small basic gray site-tab-link button site-tab-close "><i class="delete icon"></i></a></div>';
+        var tmpTabHTML = '<div group="logs:job-tabs" item="' + tmpNewJobID + '" class="ui item selected nopad noshadow" action="logs:selectTabLink" appuse="tablinks" group="logs:job-tabs" item="' + tmpNewJobID + '" ><a class="ui site-tab-link-body basic button">Tab long long long long long long long long' + ThisPage.jobLogsAt + '</a><a action="logs:closeSelectedTab" class="" style="padding-left:4px;"><i class="delete icon"></i></a></div>';
         //--- Prepend the tab so new is first (param 3 / true)
         ThisApp.addToFacet('logs:job-tabs', tmpTabHTML, false, true);
         ThisPage.openJobLink(tmpNewJobID);
