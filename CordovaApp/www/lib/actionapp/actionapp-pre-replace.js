@@ -59,7 +59,7 @@ Key concepts / features the application framework provides:
 */
 
 //--- Global Entry Point
-var ActionAppCore = {};
+window.ActionAppCore = {};
 
 //--- Base module and simple module system --- --- --- --- --- --- --- --- --- --- --- --- 
 (function (ActionAppCore, $) {
@@ -89,110 +89,8 @@ var ActionAppCore = {};
 
     ActionAppCore.createModule("site");
     ActionAppCore.createModule("plugin");
-    ActionAppCore.createModule("extension");
 
 })(ActionAppCore, $);
-
-
-
-//--- Common Functionality Extensions
-
-
-
-/**
-     * subscribe / unsubscribe / publish
-    *     - Standard Pub / Sub functionality
-    * 
-    * 
-    * @return void
-    * 
-    */
-
-
-
-
-//--- PubSub Functionality
-(function (ActionAppCore, $) {
-
-    var ExtendMod = ActionAppCore.module("extension");
-
-    //--- Base class for application pages
-    function ThisExtention() {
-
-    }
-    var me = ThisExtention;
-
-    me.subscribe = function () {
-        this.events.on.apply(this.events, arguments);
-    };
-
-    me.unsubscribe = function () {
-        this.events.off.apply(this.events, arguments);
-    };
-
-    me.publish = function () {
-        this.events.trigger.apply(this.events, arguments);
-    };
-
-    me.initPubSub = function () {
-        this.events = $({});
-    };
-
-    //--- return the prototype to be marged with prototype of target object
-    ExtendMod.PubSub = me;
-
-})(ActionAppCore, $);
-
-
-
-/**
-  * setDisplay
-  *    - sets the attribute to hidden or not hidden
-  * 
-  * To Use: <any variable>.setDisplay(anyEl,anyBooleanValue);
-  *
-  * @param  {Object} theEl   [target object with details about the page to open]
-  * @param  {Boolean} theIsVis   [true to show, false to hide]
-  * @return void
-  */
-(function (ActionAppCore, $) {
-
-    var ExtendMod = ActionAppCore.module("extension");
-
-    //--- Base class for application pages
-    function ThisExtention() {
-
-    }
-    var me = ThisExtention.prototype;
-
-    me.setDisplay = function (theEl, theIsVis) {
-        var tmpEl = null;
-        if (!theEl) {
-            console.error("Can not set diplay for element, none provided");
-            return;
-        }
-        if (theEl.node) {
-            tmpEl = $(theEl.node());
-        } else {
-            tmpEl = $(theEl);
-        }
-        if (theIsVis) {
-            tmpEl.removeClass('hidden');
-        } else {
-            tmpEl.addClass('hidden');
-        }
-    }
-    me.show = function (theEl) {
-        me.setDisplay(theEl, true);
-    }
-    me.hide = function (theEl) {
-        me.setDisplay(theEl, false);
-    }
-
-    ExtendMod.SetDisplay = me;
-
-})(ActionAppCore, $);
-
 
 //--- CoreApp Standard App Component ---- ---- ---- ---- ---- ---- ---- 
 (function (ActionAppCore, $) {
@@ -200,21 +98,10 @@ var ActionAppCore = {};
     var SiteMod = ActionAppCore.module("site");
     SiteMod.CoreApp = CoreApp;
 
-    var ExtendMod = ActionAppCore.module("extension");
 
-    //--- Note: Everything references me not this as this is a singleton with no instances
-    var me = CoreApp.prototype;
 
-    //--- Singleton for currently running application
+    //--- Base class for application pages
     function CoreApp(theOptions) {
-
-        //--- set currently loaded application as globally available object from global entrypoint
-        ActionAppCore.app = me;
-
-        me.isDom = function(element) {
-            return element instanceof Element;  
-        }
-
         me.options = theOptions || {};
         me.actions = me.options.actions || {};
         me.actionsDelegates = me.options.actionsDelegates || {};
@@ -341,11 +228,11 @@ var ActionAppCore = {};
             ThisApp.events.trigger.apply(ThisApp.events, arguments);
         };
 
+
+
     }
 
-
-    $.extend(me, ExtendMod.SetDisplay);
-
+    var me = CoreApp.prototype;
     me.components = {};
 
     /**
@@ -365,20 +252,18 @@ var ActionAppCore = {};
        * @param  {String} theName   [The name of the facet to load]
        * @param  {String} theContent   [The content to load or object to use when rendering the template]
        * @param  {String} theOptionalTemplateName   [The content to load or object to use when rendering the template]
-       * @param  {String} theOptionalParent$   [The jQuery element to use instead of global]
-       * 
        * @return void
        * 
        * 
        */
-    me.loadFacet = function (theName, theContent, theOptionalTemplateName, theOptionalParent$) {
+    me.loadFacet = function (theName, theContent, theOptionalTemplateName) {
         var tmpSelector = '[facet="' + theName + '"]';
         var tmpContent = theContent || '';
         if (theOptionalTemplateName) {
-            tmpContent = $.templates[theOptionalTemplateName].render(tmpContent);
+            //tmpContent = $.templates[theOptionalTemplateName].render(tmpContent);
+            tmpContent = ThisApp.renderTemplate(theOptionalTemplateName,tmpContent);
         }
-        var tmpParent = (theOptionalParent$ && (theOptionalParent$.find)=='function') ? theOptionalParent$.find : $;
-        var tmpFacet = tmpParent(tmpSelector);
+        var tmpFacet = $(tmpSelector);
         tmpFacet.html(tmpContent);
         return tmpFacet;
     }
@@ -402,7 +287,8 @@ var ActionAppCore = {};
         var tmpSelector = '[facet="' + theName + '"]';
         var tmpContent = theContent || '';
         if (theOptionalTemplateName && theOptionalTemplateName != '' && theOptionalTemplateName != null) {
-            tmpContent = $.templates[theOptionalTemplateName].render(tmpContent);
+            //tmpContent = $.templates[theOptionalTemplateName].render(tmpContent);
+            tmpContent = ThisApp.renderTemplate(theOptionalTemplateName,tmpContent);
         }
         var tmpFacet = $(tmpSelector);
         if (thePrepend === true) {
@@ -452,13 +338,13 @@ var ActionAppCore = {};
        * @return this
        */
     me.gotoPage = function (thePageName) {
-        me.gotoTab({ group: 'app:pages', item: thePageName, animation: 'slide down', duration: 150 });
+        me.gotoTab({ group: 'app:pages', item: thePageName, animation: 'slide down', duration: 10 });
         var tmpActionObj = ThisApp.getNavConfig(thePageName);
         if (tmpActionObj && typeof (tmpActionObj.onActivate) == 'function') {
             tmpActionObj.onActivate();
         }
         me.hideSidebar();
-
+        
         ThisApp.refreshLayouts();
         return me;
     }
@@ -475,6 +361,9 @@ var ActionAppCore = {};
     me.sidebarSetDisplay = function (theIsVis) {
         $('[appuse="side-menu"]').sidebar((theIsVis !== false) ? 'show' : 'hide');
         return me;
+    }
+    me.sidebarGetDisplay = function () {
+        return $('[appuse="side-menu"]').sidebar('is visible');
     }
     me.hideSidebar = function () {
         return me.sidebarSetDisplay(false);
@@ -566,7 +455,7 @@ var ActionAppCore = {};
         me.getByAttr$(tmpSelector, tmpParent).addClass('hidden').transition('hide', 1);
         tmpSelector.item = tmpItemId;
         me.getByAttr$(tmpSelector, tmpParent).removeClass('hidden').transition(tmpAnimation + ' in', tmpAnimDuration);
-        if (ThisApp.refreshLayouts) {
+        if( ThisApp.refreshLayouts ){
             ThisApp.refreshLayouts();
         }
         return me;
@@ -728,25 +617,21 @@ var ActionAppCore = {};
      * @param  {Boolean} theIsVis   [true to show, false to hide]
      * @return void
      */
-    // me.setDisplay = function (theEl, theIsVis) {
-    //     var tmpEl = $(theEl);
-    //     if (theEl.node) {
-    //         tmpEl = $(theEl.node());
-    //     } else {
-    //         tmpEl = $(theEl);
-    //     }
-    //     if (theIsVis) {
-    //         tmpEl.removeClass('hidden');
-    //     } else {
-    //         tmpEl.addClass('hidden');
-    //     }
-    // }
-    // me.show = function (theEl) {
-    //     me.setDisplay(theEl, true);
-    // }
-    // me.hide = function (theEl) {
-    //     me.setDisplay(theEl, false);
-    // }
+    me.setDisplay = function (theEl, theIsVis) {
+        var tmpEl = $(theEl);
+        if (theIsVis) {
+            tmpEl.removeClass('hidden');
+        } else {
+            tmpEl.addClass('hidden');
+        }
+    }
+    me.show = function (theEl) {
+        me.setDisplay(theEl, true);
+    }
+    me.hide = function (theEl) {
+        me.setDisplay(theEl, false);
+    }
+
     me.initModuleComponents = initModuleComponents;
     function initModuleComponents(theApp, theModuleName, theComponents) {
         var appModule = ActionAppCore.module(theModuleName);
@@ -762,7 +647,6 @@ var ActionAppCore = {};
         }
     }
 
-
     /**
      * useModuleComponentsuseModuleComponents
      *    - Initializes application components from the modules they live in
@@ -777,40 +661,31 @@ var ActionAppCore = {};
      *        ... if components add their own navigational items, the navigation items show in that order
      *
      * @param  {String} theModuleName   [the name of the module (i.e. app or plugin or any custom module)]
-     * @param  {Array<String/Object>} theComponents   [List of components to load form this module, in the order they should initialize.  Pass string for just plugin  or {name:yourname,options:optionalOptions}]
+     * @param  {Array<String>} theComponentNames   [List of component to load form this module, in the order they should initialize]
      * @return void
      */
     me.useModuleComponents = useModuleComponents;
-    function useModuleComponents(theModuleName, theComponents) {
-        if (!theModuleName && theComponents) {
-            console.error("Need both theComponents and theModuleName");
+    function useModuleComponents(theModuleName, theComponentNames) {
+        if (!theModuleName && theComponentNames) {
+            console.error("Need both theComponentNames and theModuleName");
             return false;
         }
-        var tmpComponents = theComponents || [];
-
+        var tmpComponentNames = theComponentNames || [];
+        if (typeof (tmpComponentNames) == 'string') {
+            tmpComponentNames = [tmpComponentNames];
+        }
         var tmpModule = ActionAppCore.module(theModuleName);
         if (!(tmpModule)) {
             console.error("Module not found: " + tmpModule);
             return false;
         }
-        for (var aPos in tmpComponents) {
-            var tmpComp = tmpComponents[aPos];
-            if (typeof (tmpComp) == 'string') {
-                tmpComp = { name: tmpComp };
+        for (var aPos in tmpComponentNames) {
+            var tmpName = tmpComponentNames[aPos];
+            try {
+                var tmpNew = new tmpModule[tmpName]({ app: ThisApp });
+            } catch (ex) {
+                console.error("Error loading component: " + tmpName);
             }
-            var tmpName = tmpComp.name || '';
-            if (tmpName) {
-                try {
-                    var tmpOptions = tmpComp.options || {};
-                    $.extend(tmpOptions, { app: ThisApp });
-                    var tmpNew = new tmpModule[tmpName](tmpOptions);
-                } catch (ex) {
-                    console.error("Error loading component: " + tmpName);
-                }
-            } else {
-                console.error("Attempting to load plugin, but no name provided.", tmpComp);
-            }
-
         }
         return true;
     }
@@ -989,14 +864,8 @@ var ActionAppCore = {};
      *    - Returns HTML rendered from a template using jsrender
      * 
      * 
-     * Example: 
-     *   ThisApp.showCommonDialog('sometempaltename');
-     *   ThisApp.showCommonDialog('sometempaltename',someData);
-     *   ThisApp.showCommonDialog({tempate:'sometempaltename'});
-     *   ThisApp.showCommonDialog({tempate:'sometempaltename', data:someData});
-     *
-     * @param  {String} theActionDelegateName   [the prefix to use (do not iclude the ":")]
-     * @param  {Function} theDelegate   [The standard "Action" function to handle the action pass (action name, target object)]
+     * @param  {String or Object} theOptionsOrTemplateName  Pass in object with .template and .data .. or just a template name and pass data as second param
+     * @param  {Object} theDataIfNotObject  The data object if not part of initial param
      * @return void
      */
     me.getTemplatedContent = function (theOptionsOrTemplateName, theDataIfNotObject) {
@@ -1011,15 +880,9 @@ var ActionAppCore = {};
             console.error("Need to pass template name as a string or an object with a .template")
             return;
         }
-        return $.templates[tmpTemplateName].render(tmpData);
+        //return $.templates[tmpTemplateName].render(tmpData);
+        return ThisApp.renderTemplate(tmpTemplateName,tmpData);
     }
-
-
-    
-    //======================================
-    //======================================
-    //======================================
-
 
     /**
      * compileTemplates
@@ -1077,13 +940,6 @@ var ActionAppCore = {};
         });
         //--- Compile them all at once
       }
-
-
-    //======================================
-    //======================================
-    //======================================
-
-
     //--- App Actions ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
     //--- ========  ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
 
@@ -1161,15 +1017,15 @@ var ActionAppCore = {};
         var tmpSBSelector = '[semaction="showsidebar"]';
         if ($(tmpSBSelector).length > 0) {
             me.hasSidebar = true;
-            $('[appuse="side-menu"]').sidebar('attach events', tmpSBSelector);
+            $('[appuse="side-menu"]')
+            .sidebar('setting', 'duration', 20)
+            .sidebar('setting', 'mobileTransition', 'fade')            
+            .sidebar('attach events', tmpSBSelector);
         }
     }
-
     function initGlobalDialog() {
-        var tmpNewDiv = $('<div facet="site:global-dialog" class="hidden"></div>').appendTo('body');
-        me.loadFacet(commonDialogFacet, '', 'tpl-common-global-dialog')
+        me.loadFacet('site:global-dialog', '', 'tpl-common-global-dialog')
     }
-
     function initAppActions() {
         $('[appuse="appbody"]').on("click", itemClicked)
     }
@@ -1231,38 +1087,12 @@ var ActionAppCore = {};
          */
     }
 
-    me.siteLayout = null;
-
-    me.refreshLayouts = function (theTargetEl) {
-        me.siteLayout.resizeAll();
-    }
-    me.resizeLayouts = function (name, $pane, paneState) {
-        try {
-            var tmpH = $pane.get(0).clientHeight - $pane.get(0).offsetTop - 1;
-            me.getByAttr$({ appuse: "cards", group: "app:pages", item: '' }).css("height", tmpH + "px");;
-        } catch (ex) {
-
-        }
-    }
 
     me.init = init;
     var ThisCoreApp = this;
     function init(theAppConfig) {
-
+        
         ThisCoreApp = this;
-
-        //--- ToDo: Support options in theAppConfig to control this        
-        me.siteLayout = $('body').layout({
-            center__paneSelector: ".site-layout-center"
-            , north__paneSelector: ".site-layout-north"
-            , north__spacing_open: 4
-            , north__spacing_closed: 4
-            , north__resizable: false
-            , spacing_open: 6 // ALL panes
-            , spacing_closed: 8 // ALL panes
-            , onready: ThisApp.resizeLayouts
-            , center__onresize: ThisApp.resizeLayouts
-        });
 
         me.config = me.config || {};
         if (theAppConfig) {
@@ -1284,6 +1114,7 @@ var ActionAppCore = {};
         }
 
         //--- Standard functionality  ===================================
+       
         var tmpNavHTML = $.templates['tpl-side-menu-item'].render(me.config['navlinks']);
         $('[appuse="side-menu"]').html(tmpNavHTML);
 
@@ -1291,12 +1122,14 @@ var ActionAppCore = {};
         $('[appuse="nav-menu"]').html(tmpNavHTML);
 
         var tmpHeaderHTML = $.templates['tpl-top-menu'].render(me.config);
+        console.log("tmpHeaderHTML",tmpHeaderHTML);
         $('[appuse="top-menu"]').html(tmpHeaderHTML);
 
-        initMenus();
         initAppActions();
+
         initMessageCenter();
         initGlobalDialog();
+        initMenus();
 
         if (me.config['navlinks']) {
             var tmpFirstNavLink = me.config['navlinks'][0];
@@ -1312,119 +1145,32 @@ var ActionAppCore = {};
 
 
 
-    // //--- Templates ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
-    // //--- ========  ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
-    // //--- ========  ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
+    //--- Templates ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
+    //--- ========  ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
+    //--- ========  ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
     // $.templates({
-    //     "tpl-standard-loading-icon": `
-    //     <div>
-    //         <i class="huge icons">
-    //         <i class="big loading spinner icon"></i>
-    //         </i>
-    //     </div>
-
-    // `});
-
+    //     "tpl-standard-loading-icon": '<div> <i class="huge icons"> <i class="big loading spinner icon"></i> </i> </div>'});
 
     // $.templates({
-    //     "tpl-border-layout": `
-        
-    //     {{if (layoutOptions.north != false)}}
-    //     <div facet="{{>layoutOptions.facetPrefix}}:north" class="middle-north">
-    //         {{if (layoutOptions.northContent)}}
-    //             {{:layoutOptions.northContent}}
-    //         {{/if}}
-    //     </div>
-    //     {{/if}}
-
-    //     {{if (layoutOptions.south != false)}}
-    //     <div facet="{{>layoutOptions.facetPrefix}}:south" class="middle-south">
-    //         {{if (layoutOptions.southContent)}}
-    //             {{:layoutOptions.southContent}}
-    //         {{/if}}
-    //     </div>
-    //     {{/if}}
-
-        
-    //     <div facet="{{>layoutOptions.facetPrefix}}:center" class="middle-center">
-    //         {{if (layoutOptions.centerContent)}}
-    //             {{:layoutOptions.centerContent}}
-    //         {{/if}}
-    //     </div> 
-       
-
-    //     {{if (layoutOptions.west != false)}}
-    //     <div facet="{{>layoutOptions.facetPrefix}}:west" class="middle-west">
-    //         {{if (layoutOptions.westContent)}}
-    //             {{:layoutOptions.westContent}}
-    //         {{/if}}
-    //     </div>
-    //     {{/if}}
-
-    //     {{if (layoutOptions.east != false)}}
-    //     <div facet="{{>layoutOptions.facetPrefix}}:east" class="middle-east">
-    //         {{if (layoutOptions.eastContent)}}
-    //             {{:layoutOptions.eastContent}}
-    //         {{/if}}
-    //     </div>
-    //     {{/if}}
-
-    // `});
+    //     "tpl-border-layout": '{{if (layoutOptions.north != false)}} <div facet="{{>layoutOptions.facetPrefix}}:north" class="middle-north"> {{if (layoutOptions.northContent)}} {{:layoutOptions.northContent}} {{/if}} </div> {{/if}} {{if (layoutOptions.south != false)}} <div facet="{{>layoutOptions.facetPrefix}}:south" class="middle-south"> {{if (layoutOptions.southContent)}} {{:layoutOptions.southContent}} {{/if}} </div> {{/if}} <div facet="{{>layoutOptions.facetPrefix}}:center" class="middle-center"> {{if (layoutOptions.centerContent)}} {{:layoutOptions.centerContent}} {{/if}} </div> {{if (layoutOptions.west != false)}} <div facet="{{>layoutOptions.facetPrefix}}:west" class="middle-west"> {{if (layoutOptions.westContent)}} {{:layoutOptions.westContent}} {{/if}} </div> {{/if}} {{if (layoutOptions.east != false)}} <div facet="{{>layoutOptions.facetPrefix}}:east" class="middle-east"> {{if (layoutOptions.eastContent)}} {{:layoutOptions.eastContent}} {{/if}} </div> {{/if}}'});
 
     // $.templates({
-    //     "tpl-common-global-dialog": `
-    //     <div appuse="global-dialog" class="ui modal">
-    //     <i class="close icon"></i>
-    //     <div facet="site:dialog-header" class="header"></div>
-    //     <div facet="site:dialog-content" class="content">
-    //     </div>
-    //     {{if (actions != null && actions != '')}}
-    //     <div facet="site:dialog-actions" class="actions"></div>
-    //     {{/if}}
-        
-    // </div>
-
-    // `});
+    //     "tpl-common-global-dialog":'<div appuse="global-dialog" class="ui modal"> <i class="close icon"></i> <div facet="site:dialog-header" class="header"></div> <div facet="site:dialog-content" class="content"> </div> {{if (actions != null && actions != "")}} <div facet="site:dialog-actions" class="actions"></div> {{/if}} </div>'});
 
     // $.templates({
-    //     "tpl-side-menu-item": `
-    // <a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="{{if display == "primary"}}mobileonly{{/if}} item">{{:title}}</a>
-    // `});
+    //     "tpl-side-menu-item": '<a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="{{if display == "primary"}}mobileonly{{/if}} item">{{:title}}</a>'});
 
     // $.templates({
-    //     "tpl-nav-menu-item": `
-    // <a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="{{if display == "primary"}}mobileonly{{/if}} item">{{:title}}</a>
-    // `});
+    //     "tpl-nav-menu-item": '<a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="{{if display == "primary"}}mobileonly{{/if}} item">{{:title}}</a>'});
 
     // $.templates({
-    //     "tpl-top-menu-item": `
-    //     {{if (display == "primary" || display == "both")}}<a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="mobilehidden item">{{:title}}</a>{{/if}}
-    // `});
+    //     "tpl-top-menu-item": '{{if (display == "primary" || display == "both")}}<a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="mobilehidden item">{{:title}}</a>{{/if}}'});
 
     // $.templates({
-    //     "tpl-top-menu-button": `
-    //     <a appaction="{{:appaction}}" class="ui button">{{:title}}</a>
-    // `});
+    //     "tpl-top-menu-button": '<a appaction="{{:appaction}}" class="ui button">{{:title}}</a>'});
 
     // $.templates({
-    //     "tpl-top-menu": `
-    //     <div class=" ui vertical masthead center aligned segment">
-    //     <div class="rem-ui rem-container">
-    //     {{if (title != null)}}
-    //     <h1>{{:title}}</h1>
-    //     {{/if}}
-    //     <div appuse="topmenu" class="ui large secondary pointing menu">
-            
-    //         {{for navlinks tmpl="tpl-top-menu-item"/}}
-    //         <div class="right item">
-    //         {{for navbuttons tmpl="tpl-top-menu-button"/}}
-    //         </div>
-    //     </div>
-    //     </div>
-    // </div>    
-    // `});
-
-
+    //     "tpl-top-menu": '<div class=" ui vertical masthead center aligned segment"> <div class="rem-ui rem-container"> {{if (title != null)}} <h1>{{:title}}</h1> {{/if}} <div appuse="topmenu" class="ui large secondary menu"> {{for navlinks tmpl="tpl-top-menu-item"/}} <div class="right item"> {{for navbuttons tmpl="tpl-top-menu-button"/}} </div> </div> </div> </div> '});
 
 
 
@@ -1457,7 +1203,7 @@ License: MIT
 (function (ActionAppCore, $) {
 
     var SiteMod = ActionAppCore.module("site");
-    SiteMod.SitePage = SitePage;
+    SiteMod.SitePage = ThisController;
 
     var defaultLayoutOptions = {
         spacing_closed: 8,
@@ -1485,8 +1231,8 @@ License: MIT
 
 
     //--- Base class for application pages
-    function SitePage(theOptions) {
-
+    function ThisController(theOptions) {
+        
         this.options = theOptions || {};
         this.pageName = this.options.pageName || '';
         this.pageActionPrefix = this.options.pageActionPrefix || '';
@@ -1498,45 +1244,41 @@ License: MIT
         this.layoutOptions = this.options.layoutOptions || false;
 
 //!this.pageTemplate || 
-        if (this.layoutOptions) {
+        if( this.layoutOptions ){
             this.layoutOptions = this.layoutOptions || {};
             this.layoutConfig = $.extend({}, defaultLayoutOptions, (this.options.layoutConfig || {}));
 
             //--- Use standard border layout template if none provided
             this.layoutOptions.facetPrefix = this.layoutOptions.facetPrefix || this.pageName;
             //this.pageTemplate = this.pageTemplate || 'tpl-border-layout';
-
+            //console.log("layoutOptions",this.layoutOptions)
             //--- Extend with new layout related facet functions
-            this.addToRegion = function (theRegion, theContent, theOptionalTemplateName, thePrepend) {
+            this.addToRegion = function(theRegion, theContent, theOptionalTemplateName, thePrepend){
                 var tmpRegionFacetName = this.layoutOptions.facetPrefix + ":" + theRegion;
                 ThisApp.addToFacet(tmpRegionFacetName, theContent, theOptionalTemplateName, thePrepend)
             }
-            this.loadRegion = function (theRegion, theContent, theOptionalTemplateName) {
+            this.loadRegion = function(theRegion, theContent, theOptionalTemplateName){
                 var tmpRegionFacetName = this.layoutOptions.facetPrefix + ":" + theRegion;
                 ThisApp.loadFacet(tmpRegionFacetName, theContent, theOptionalTemplateName)
             }
-
+            
         }
+        
+        //this.app = ThisApp; //new SiteMod.CoreApp(); //singleton - global site application object
 
         this.appModule = this.options.appModule || false;
         if (this.appModule) {
             this.appModule[this.pageName] = this;
         }
 
+
+        //registerPage();
+        //ToDo: _registerPage
     }
 
-    var me = SitePage.prototype;
+    var me = ThisController.prototype;
     var that = this;
 
-    
-    me.open = function (theOptions) {
-        return ThisApp.gotoPage(this.pageName);p
-    }
-    me.focus = me.open;
-    
-    me.loadFacet = function (theName, theContent, theOptionalTemplateName) {
-        return ThisApp.loadFacet(theName, theContent, theOptionalTemplateName, this.getParent$());
-    }
     me.getByAttr$ = function (theItems, theExcludeBlanks) {
         return ThisApp.getByAttr$(theItems, this.getParent$(), theExcludeBlanks);
     }
@@ -1550,27 +1292,6 @@ License: MIT
     }
 
 
-    //======================================
-    //======================================
-    //======================================
-
-    this.getLayoutHTML = function(){
-        var tmpRet = "";
-        var tmpAll = ['north','south','center', 'east','west'];
-        var tmpPre = this.layoutOptions.facetPrefix;
-        for(var i = 0 ; i < tmpAll.length ; i++){
-            var tmpArea = tmpAll[i];
-            if( this.layoutOptions[tmpArea] !== false){
-                tmpRet += '<div facet="' + tmpPre + ':' + tmpArea+ '" class="middle-' + tmpArea+ '"></div>';    
-            }
-        }
-        return tmpRet;
-    };
-    //======================================
-    //======================================
-    //======================================
-
-
     me.init = init;
     function init(theApp) {
 
@@ -1578,8 +1299,8 @@ License: MIT
             this.app = theApp;
         }
 
-        if (typeof (this.preInit) == 'function') {
-            this.preInit(this.app)
+        if (typeof (this._onPreInit) == 'function') {
+            this._onPreInit(this.app)
         }
 
         if (this.app && this.pageActionPrefix && this.pageActionPrefix != '') {
@@ -1595,7 +1316,24 @@ License: MIT
                 "display": this.linkDisplayOption,
                 "onActivate": onActivateThisPage.bind(this)
             })
-            
+            //theApp.config.navlinks.push()
+            //var tmpContentHTML = $.templates[this.pageTemplate].render(this);
+            //console.log("tmpContentHTML",tmpContentHTML)
+
+            // this.hasNorth = function(){
+            //     return this.layoutOptions.north !== false;
+            // }
+            // this.hasSouth = function(){
+            //     return this.layoutOptions.south !== false;
+            // }
+            // this.hasEast = function(){
+            //     return this.layoutOptions.east !== false;
+            // }
+            // this.hasWest = function(){
+            //     return this.layoutOptions.west !== false;
+            // }
+
+            //--- Returns the HTML needed for the layout based on the page layout options
             this.getLayoutHTML = function(){
                 var tmpRet = "";
                 var tmpAll = ['north','south','center', 'east','west'];
@@ -1610,35 +1348,26 @@ License: MIT
             };
              
 
-            //var tmpContentHTML = $.templates[this.pageTemplate].render(this);
+            //var tmpContentHTMLH = this.getLayoutHTML(); //ThisApp.renderTemplate(this.pageTemplate,this);
+            
+            //console.log("HB layoutOptions",this.layoutOptions)
+            //console.log("HB version",tmpContentHTMLH)
+
             this.parentEl = this.app.getByAttr$({ group: "app:pages", item: this.pageName })
-            //this.parentEl.html(tmpContentHTML);
             this.parentEl.html(this.getLayoutHTML());
 
-            if (typeof (this.compInit) == 'function') {
-                this.compInit(this.app)
+            if (typeof (this._onInit) == 'function') {
+                this._onInit(this.app)
             }
 
-            if (this.layoutOptions && this.layoutConfig) {
+            if( this.layoutOptions && this.layoutConfig){
                 this.layoutSpot = ThisApp.getByAttr$({ group: ThisApp.pagesGroup, "item": this.pageName });
                 this.layout = this.layoutSpot.layout(this.layoutConfig);
             }
 
         }
 
-        //--- Example of how to interact with theApp or ActionAppCore.app
-        /*
-        To register actions not handled by action handler (prefixed:)
-            theApp.registerAction("logs:refreshMessageCenter", refreshMessageCenter);
-            theApp.registerAction("logs:clearMessageCenter", clearMessageCenter);
-
-        To subscribe to application level messages ...
-           theApp.subscribe("message:sent", refreshMessageCenter)
-        */
-
-
     }
-
 
 
     //---- Internal Stuff ---------------------
@@ -1652,17 +1381,14 @@ License: MIT
         }
     }
      */
-    me.runAction = runAction;
+
     function runAction(theAction, theSourceObject) {
-        var tmpAction = theAction || '';
-        tmpAction = tmpAction.replace((this.pageActionPrefix + ":"), '');
-        if (typeof (this[tmpAction]) == 'function') {
-            this[tmpAction](tmpAction, theSourceObject);
-        } else if (typeof (me[tmpAction]) == 'function') {
-            me[tmpAction](tmpAction, theSourceObject);
+        if (typeof (this[theAction]) == 'function') {
+            this[theAction](theAction, theSourceObject);
         }
     }
 
+    //--- Hook into the app lifecycle and pass it along
     function onActivateThisPage() {
         //-refresh local message details everytime we change to this view
         if(typeof(this._onLoad) == 'function'){
@@ -1676,7 +1402,8 @@ License: MIT
             this._onFirstLoad();
         }
     }
-    
+
+
     return me;
 
 })(ActionAppCore, $);

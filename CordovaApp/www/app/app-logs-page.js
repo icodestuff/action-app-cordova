@@ -50,17 +50,10 @@ License: MIT
     //    Do the lazy loaded stuff in the initial load, then do any checks needed when page is active
     ThisPage._onFirstLoad = function(){
         console.log("Log Page: Initial Load of Log Page, lazy load stuff here");
-        var tmpModuleTemplates = {};
-        tmpModuleTemplates[thisSiteSpecs.pageActionPrefix +":page-header"] = '<div class="ui menu" style="padding-bottom:0px;margin-bottom:0px;"> <a appuse="tablinks" group="logs:tabs" item="activity" action="showSubPage" class="active item"> Messages</a> <a appuse="tablinks" group="logs:tabs" item="jobs" action="showSubPage" class="item"> Job Logs</a> <a appuse="tablinks" group="logs:tabs" item="archives" action="showSubPage" class="item"> Log Archives</a> </div>';
-        tmpModuleTemplates[thisSiteSpecs.pageActionPrefix +":page-footer"] = '<div appuse="cards" group="logs:tabs" item="activity"> activity </div> <div appuse="cards" group="logs:tabs" item="jobs" class="hidden"> jobs<br />Multiline footer</div><div appuse="cards" group="logs:tabs" item="archives" class="hidden">archives</div>';
-        tmpModuleTemplates[thisSiteSpecs.pageActionPrefix +":page-body"] = '<div> <div appuse="cards" group="logs:tabs" item="activity"> <div class="ui" style="padding-top:5px;margin-top:0px;min-height:300px"> <div class="ui menu" style="padding-top:0;margin-top:0;overflow:auto;"> <div class="item"> <div action="logs:refreshMessageCenter" class="ui primary basic button">&#160;<i class="icon refresh"></i></div> &#160; <div action="logs:sendTestMessages" class="ui primary basic button">Send Messages</div> &#160; <div action="logs:clearMessageCenter" class="ui primary basic button">Clear Messages</div> &#160; <div action="logs:runTest" class="ui primary basic button">Run Test</div>&#160; <div action="logs:runTest" class="ui primary basic button">Run Test</div>&#160; <div action="logs:runTest" class="ui primary basic button">Run Test</div>&#160; <div action="logs:runTest" class="ui primary basic button">Run Test</div> </div> </div> <div facet="logs-messages"> No Messages. </div> </div> </div> <div appuse="cards" group="logs:tabs" item="jobs" class="hidden"> <div class="ui" style="padding-top:5px;margin-top:0px;min-height:300px"> <div class="ui menu segment nopad noshadow" style="overflow:auto;scroll-y:auto;padding-top:0;margin-top:0;"> <div class="item"> <div action="logs:addJobLog" class="ui green basic button site-tab-link">&#160;<i class="icon add"></i></div> <div action="logs:clearJobLogs" group="logs:job-tabs" class="ui green basic button site-tab-link">Close All</div> </div> <div appuse="tablinks-body" group="logs:job-tabs" facet="logs:job-tabs" class="item plain" > </div> </div> <div facet="logs-jobs" appuse="cards-body" group="logs:job-tabs"> </div> </div> </div> <div appuse="cards" group="logs:tabs" item="archives" class="hidden"> Log Archives Content </div></div>';
-        // tmpModuleTemplates["app-logs-message-center-item"] = '<div class="ui {{:type}} message" style="margin:0;margin-top:2px;"> <div class="header"> {{:title}} </div> {{:text}} </div>';
-        ThisPage.templates = tmpModuleTemplates;
-        //these were separate, now doing this lazy loaded
-        var tmpTPLS = ThisPage.templates;
-        ThisPage.loadRegion('north', tmpTPLS[thisSiteSpecs.pageActionPrefix + ':page-header']);
-        ThisPage.loadRegion('south', tmpTPLS[thisSiteSpecs.pageActionPrefix + ':page-footer']);
-        ThisPage.loadRegion('center', tmpTPLS[thisSiteSpecs.pageActionPrefix + ':page-body']);
+        var tmpContext = {}
+        ThisPage.loadRegion('north', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-header', tmpContext));
+        ThisPage.loadRegion('south', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-footer', tmpContext));
+        ThisPage.loadRegion('center', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-body', tmpContext));
     }
     
     ThisPage._onLoad = function(){
