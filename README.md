@@ -52,6 +52,7 @@ While the environment is well suited for all web development, this package is sp
 To run on a webpage .. at the console type this ...
 - npm install
 - npm start
+
 Then open the browser to
 [http://localhost:7070/]
 
@@ -66,7 +67,7 @@ To run on an android emulator ..
 To run on an android phone ..
  - ./tophone
 
-## Back to Action Application Stuff ..
+## More about the Action Application Environment
 
 ### Design Goals
 The design goal for this application was to have a super simple yet modular, responsive and powerful starting point for general applications and developer testing.
