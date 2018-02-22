@@ -13,23 +13,32 @@
 
  - Once an action is registered, there are lots of ways to call it.
 
-   The primary way to call an action is to add an attribute to any element with the name "action" 
-    ... such as ... <div action="doSomethingCool">Do it!</div>, when clicked, something cool will happen.
-  
+   The primary way to call an action is to add an attribute to any element with the name "action".
+
+   Example:
+```
+     <div action="doSomethingCool">Do it!</div>
+```
+   - and when clicked, something cool will happen.
+
     How? You create a function called doSomethingCool and do cool stuf there..
 
     Example:
     ==================
     In the HTML you have ... 
+```
     <button action="doSomethingCool" group="coolStuff" item="fred">Show Fred</button>
+```
+
 
     In your page, you add this ...
+```
     ThisPage.doSomethingCool = function (theAction, theTarget) {
         var tmpParams = ThisApp.getAttrs(theTarget, ['group', 'item']);
         //--- returns {group:"coolStuff", item:"fred"}
         ThisPage.doSomethingElseWithThisAsParams(tmpParams);    
     }
-
+```
     Done.
 
 
