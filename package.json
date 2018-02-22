@@ -1,5 +1,5 @@
 {
-  "name": "node-http-staic-demo",
+  "name": "com-hookedup-action-app-cordova-http",
   "version": "1.0.2",
   "scripts": {
     "init": "npm install",
