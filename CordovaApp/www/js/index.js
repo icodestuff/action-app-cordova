@@ -19,12 +19,15 @@
      var app = {
         // Application Constructor
         initialize: function() {
+
           document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
           document.addEventListener('backbutton', this.onBackButton.bind(this), false);
           document.addEventListener('volumedownbutton', this.onVolDownButton.bind(this), false);
           document.addEventListener('volumeupbutton', this.onVolUpButton.bind(this), false);
-          navigator.app.overrideButton("menubutton", true);  // <-- Add this line
-          document.addEventListener('menubutton', this.onMenuButton.bind(this), false);
+          // document.addEventListener('menubutton', this.onMenuButton.bind(this), false);
+          //navigator.app.overrideButton("menubutton", true);  // <-- Add this line
+          //document.addEventListener('menubutton', this.onMenuButton.bind(this), false);
+
         },
         onBackButton: function(){
           //alert('onBackButton');
@@ -53,7 +56,9 @@
             tmpHasLaunched = true;
             setup();
             this.receivedEvent('deviceready');
-        },
+            navigator.app.overrideButton("menubutton", true);  // <-- Add this line
+            document.addEventListener("menubutton", this.onMenuButton, false);
+          },
         // Update DOM on a Received Event
         receivedEvent: function(id) {
 

@@ -293,7 +293,11 @@
       z-index: 3;
     }
 
-    /* Semantic UI Override / Fixes ?? */
+    /* Semantic UI Overrides  */
     .ui.modal>.content {
       width:auto !important;
+    }
+
+    .ui.segment, .ui.segments .segment {
+      font-size: 1.2rem;
     }
