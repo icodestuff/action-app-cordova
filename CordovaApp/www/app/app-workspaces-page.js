@@ -19,7 +19,7 @@ License: MIT
 
     thisSiteSpecs.layoutOptions = {
         facetPrefix: thisSiteSpecs.pageActionPrefix,
-        north: true,
+        north: false,
         west: false,
         east: false
       
@@ -37,7 +37,7 @@ License: MIT
     
     ThisPage._onFirstLoad = function() {
         var tmpModuleTemplates = {};
-        tmpModuleTemplates[thisSiteSpecs.pageActionPrefix +":page-header"] = '<div class="ui menu" style="padding-bottom:0;margin-bottom:0"> <a appuse="tablinks" group="ws:tabs" item="home" action="showSubPage" class="active item">Dashboard</a> <a appuse="tablinks" group="ws:tabs" item="all" action="showSubPage" class="item">Workspaces</a> <a appuse="tablinks" group="ws:tabs" item="more" action="showSubPage" class="item">More</a>';
+        //tmpModuleTemplates[thisSiteSpecs.pageActionPrefix +":page-header"] = '<div class="ui menu" style="padding-bottom:0;margin-bottom:0"> <a appuse="tablinks" group="ws:tabs" item="home" action="showSubPage" class="active item">Dashboard</a> <a appuse="tablinks" group="ws:tabs" item="all" action="showSubPage" class="item">Workspaces</a> <a appuse="tablinks" group="ws:tabs" item="more" action="showSubPage" class="item">More</a>';
         tmpModuleTemplates[thisSiteSpecs.pageActionPrefix +":page-footer"] = '<h1>Workspaces Footer</h1>';
         var tmpAllBody = '';
         tmpAllBody += '<div appuse="cards" group="ws:tabs" item="home"> <div class="ui" style="padding-top:5px;margin-top:0px;min-height:300px;"> <div class="requests-outline"> <svg facet="ws:home-svg" viewBox="0 0 800 800" style="padding:0;margin:0;min-height:400px;background-color:black"> </div> <div class="requests-details"> <div class="ui menu flow middle" style=""> <div class=""> <div action="ws:runTest1" class="ui primary basic icon button"><i class="icon home"></i></div> </div> <div class="item"> <div action="ws:addBox" class="ui purple basic button">Add Box</div> </div> </div> <div facet="ws:home-out"></div> </div> </div> </div> <div appuse="cards" group="ws:tabs" item="all" class="hidden"> <div>Workspace: <b><span facet="ws:currentWorkspace">';
@@ -48,9 +48,20 @@ License: MIT
         ThisPage.templates = tmpModuleTemplates;
         //-- were sep
         var tmpTPLS = ThisPage.templates;
-        ThisPage.loadRegion('north', tmpTPLS[thisSiteSpecs.pageActionPrefix + ':page-header']);
+        //ThisPage.loadRegion('north', tmpTPLS[thisSiteSpecs.pageActionPrefix + ':page-header']);
+        var tmpContext = {}
+
         ThisPage.loadRegion('south', tmpTPLS[thisSiteSpecs.pageActionPrefix + ':page-footer']);
-        ThisPage.loadRegion('center', tmpTPLS[thisSiteSpecs.pageActionPrefix + ':page-body']);
+        // ThisPage.loadRegion('center', tmpTPLS[thisSiteSpecs.pageActionPrefix + ':page-body']);
+        ThisPage.loadRegion('center', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-body', tmpContext));
+
+        $('.context.example .ui.sidebar')
+        .sidebar({
+            context: $('.context.example .bottom.segment')
+        })
+        .sidebar('attach events', '.context.example .menu .item')
+        ;
+
     }
 
     //---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 

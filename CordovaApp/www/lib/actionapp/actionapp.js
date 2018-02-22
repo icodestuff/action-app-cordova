@@ -913,9 +913,10 @@ window.ActionAppCore = {};
     me.tplHandlebars = {};
     me.renderTemplate = function(theName, theContext){
         try {
-            return (ThisApp.tplHandlebars[theName])(theContext);
+            var tmpFn = (ThisApp.tplHandlebars[theName]);
+            return tmpFn(theContext);
         } catch (theError) {
-            console.error("Error rendering template " + theError);
+            console.error("Error rendering template " + theError,"Name was " + theName);
         }
     }
     me.compileHandlebars = function(theOptionalAttrName, theOptionalTarget){
@@ -930,6 +931,7 @@ window.ActionAppCore = {};
           //--- Add innerHTML to the templates object
           //me.htmlHandlebars[tmpKey] = "" + this.innerHTML;
           me.tplHandlebars[tmpKey] = Handlebars.compile(this.innerHTML);          
+          console.log("Added tmpKey",tmpKey);
           //--- clear so there is only one
           this.innerHTML = '';
         });
