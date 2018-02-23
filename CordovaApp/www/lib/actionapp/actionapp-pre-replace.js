@@ -1391,15 +1391,15 @@ License: MIT
     //--- Hook into the app lifecycle and pass it along
     function onActivateThisPage() {
         //-refresh local message details everytime we change to this view
-        if(typeof(this._onLoad) == 'function'){
-            this._onLoad();
+        if(typeof(this._onActivate) == 'function'){
+            this._onActivate();
         }
         if (this.hasRefreshed) {
             return;
         }
         this.hasRefreshed = true;
-        if(typeof(this._onFirstLoad) == 'function'){
-            this._onFirstLoad();
+        if(typeof(this._onFirstActivate) == 'function'){
+            this._onFirstActivate();
         }
     }
 

@@ -27,7 +27,7 @@ License: MIT
     var ThisPage = new SiteMod.SitePage(thisSiteSpecs);
 
     //--- Hook into the app lifecycle as needed    
-    ThisPage._onFirstLoad = function() {
+    ThisPage._onFirstActivate = function() {
         //--- Build the UI
         var tmpContext = {}
         ThisPage.loadRegion('center', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-body', tmpContext));

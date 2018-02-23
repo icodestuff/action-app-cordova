@@ -375,7 +375,7 @@ var ActionAppCore = {};
         var tmpSelector = '[facet="' + theName + '"]';
         var tmpContent = theContent || '';
         if (theOptionalTemplateName) {
-            tmpContent = $.templates[theOptionalTemplateName].render(tmpContent);
+            tmpContent = me.getTemplatedContent(theOptionalTemplateName,tmpContent);
         }
         var tmpParent = (theOptionalParent$ && (theOptionalParent$.find)=='function') ? theOptionalParent$.find : $;
         var tmpFacet = tmpParent(tmpSelector);
@@ -402,7 +402,7 @@ var ActionAppCore = {};
         var tmpSelector = '[facet="' + theName + '"]';
         var tmpContent = theContent || '';
         if (theOptionalTemplateName && theOptionalTemplateName != '' && theOptionalTemplateName != null) {
-            tmpContent = $.templates[theOptionalTemplateName].render(tmpContent);
+            tmpContent = me.getTemplatedContent(theOptionalTemplateName,tmpContent);
         }
         var tmpFacet = $(tmpSelector);
         if (thePrepend === true) {
@@ -452,7 +452,7 @@ var ActionAppCore = {};
        * @return this
        */
     me.gotoPage = function (thePageName) {
-        me.gotoTab({ group: 'app:pages', item: thePageName, animation: 'slide down', duration: 150 });
+        me.gotoTab({ group: 'app:pages', item: thePageName, animation: 'fade in', duration: 100 });
         var tmpActionObj = ThisApp.getNavConfig(thePageName);
         if (tmpActionObj && typeof (tmpActionObj.onActivate) == 'function') {
             tmpActionObj.onActivate();
@@ -987,13 +987,6 @@ var ActionAppCore = {};
     /**
      * getTemplatedContent
      *    - Returns HTML rendered from a template using jsrender
-     * 
-     * 
-     * Example: 
-     *   ThisApp.showCommonDialog('sometempaltename');
-     *   ThisApp.showCommonDialog('sometempaltename',someData);
-     *   ThisApp.showCommonDialog({tempate:'sometempaltename'});
-     *   ThisApp.showCommonDialog({tempate:'sometempaltename', data:someData});
      *
      * @param  {String} theActionDelegateName   [the prefix to use (do not iclude the ":")]
      * @param  {Function} theDelegate   [The standard "Action" function to handle the action pass (action name, target object)]
@@ -1158,10 +1151,14 @@ var ActionAppCore = {};
     me.hasSidebar = false;
 
     function initMenus() {
+        //--- ToDo: Review semaction name / use ****
         var tmpSBSelector = '[semaction="showsidebar"]';
         if ($(tmpSBSelector).length > 0) {
             me.hasSidebar = true;
-            $('[appuse="side-menu"]').sidebar('attach events', tmpSBSelector);
+            $('[appuse="side-menu"]')
+            .sidebar('setting', 'duration', 20)
+            .sidebar('setting', 'mobileTransition', 'fade')            
+            .sidebar('attach events', tmpSBSelector);
         }
     }
 
@@ -1284,13 +1281,11 @@ var ActionAppCore = {};
         }
 
         //--- Standard functionality  ===================================
-        var tmpNavHTML = $.templates['tpl-side-menu-item'].render(me.config['navlinks']);
+        var tmpNavHTML = me.getTemplatedContent('tpl-side-menu-item',me.config.navlinks);
         $('[appuse="side-menu"]').html(tmpNavHTML);
-
-        var tmpNavHTML = $.templates['tpl-nav-menu-item'].render(me.config['navlinks']);
+        tmpNavHTML = me.getTemplatedContent('tpl-nav-menu-item',me.config.navlinks);
         $('[appuse="nav-menu"]').html(tmpNavHTML);
-
-        var tmpHeaderHTML = $.templates['tpl-top-menu'].render(me.config);
+        var tmpHeaderHTML = me.getTemplatedContent('tpl-top-menu',me.config.navlinks);
         $('[appuse="top-menu"]').html(tmpHeaderHTML);
 
         initMenus();
@@ -1304,135 +1299,9 @@ var ActionAppCore = {};
                 ThisApp.gotoPage(tmpFirstNavLink.name);
             }
         }
-
-
     }
 
-
-
-
-
-    // //--- Templates ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
-    // //--- ========  ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
-    // //--- ========  ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
-    // $.templates({
-    //     "tpl-standard-loading-icon": `
-    //     <div>
-    //         <i class="huge icons">
-    //         <i class="big loading spinner icon"></i>
-    //         </i>
-    //     </div>
-
-    // `});
-
-
-    // $.templates({
-    //     "tpl-border-layout": `
-        
-    //     {{if (layoutOptions.north != false)}}
-    //     <div facet="{{>layoutOptions.facetPrefix}}:north" class="middle-north">
-    //         {{if (layoutOptions.northContent)}}
-    //             {{:layoutOptions.northContent}}
-    //         {{/if}}
-    //     </div>
-    //     {{/if}}
-
-    //     {{if (layoutOptions.south != false)}}
-    //     <div facet="{{>layoutOptions.facetPrefix}}:south" class="middle-south">
-    //         {{if (layoutOptions.southContent)}}
-    //             {{:layoutOptions.southContent}}
-    //         {{/if}}
-    //     </div>
-    //     {{/if}}
-
-        
-    //     <div facet="{{>layoutOptions.facetPrefix}}:center" class="middle-center">
-    //         {{if (layoutOptions.centerContent)}}
-    //             {{:layoutOptions.centerContent}}
-    //         {{/if}}
-    //     </div> 
-       
-
-    //     {{if (layoutOptions.west != false)}}
-    //     <div facet="{{>layoutOptions.facetPrefix}}:west" class="middle-west">
-    //         {{if (layoutOptions.westContent)}}
-    //             {{:layoutOptions.westContent}}
-    //         {{/if}}
-    //     </div>
-    //     {{/if}}
-
-    //     {{if (layoutOptions.east != false)}}
-    //     <div facet="{{>layoutOptions.facetPrefix}}:east" class="middle-east">
-    //         {{if (layoutOptions.eastContent)}}
-    //             {{:layoutOptions.eastContent}}
-    //         {{/if}}
-    //     </div>
-    //     {{/if}}
-
-    // `});
-
-    // $.templates({
-    //     "tpl-common-global-dialog": `
-    //     <div appuse="global-dialog" class="ui modal">
-    //     <i class="close icon"></i>
-    //     <div facet="site:dialog-header" class="header"></div>
-    //     <div facet="site:dialog-content" class="content">
-    //     </div>
-    //     {{if (actions != null && actions != '')}}
-    //     <div facet="site:dialog-actions" class="actions"></div>
-    //     {{/if}}
-        
-    // </div>
-
-    // `});
-
-    // $.templates({
-    //     "tpl-side-menu-item": `
-    // <a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="{{if display == "primary"}}mobileonly{{/if}} item">{{:title}}</a>
-    // `});
-
-    // $.templates({
-    //     "tpl-nav-menu-item": `
-    // <a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="{{if display == "primary"}}mobileonly{{/if}} item">{{:title}}</a>
-    // `});
-
-    // $.templates({
-    //     "tpl-top-menu-item": `
-    //     {{if (display == "primary" || display == "both")}}<a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="mobilehidden item">{{:title}}</a>{{/if}}
-    // `});
-
-    // $.templates({
-    //     "tpl-top-menu-button": `
-    //     <a appaction="{{:appaction}}" class="ui button">{{:title}}</a>
-    // `});
-
-    // $.templates({
-    //     "tpl-top-menu": `
-    //     <div class=" ui vertical masthead center aligned segment">
-    //     <div class="rem-ui rem-container">
-    //     {{if (title != null)}}
-    //     <h1>{{:title}}</h1>
-    //     {{/if}}
-    //     <div appuse="topmenu" class="ui large secondary pointing menu">
-            
-    //         {{for navlinks tmpl="tpl-top-menu-item"/}}
-    //         <div class="right item">
-    //         {{for navbuttons tmpl="tpl-top-menu-button"/}}
-    //         </div>
-    //     </div>
-    //     </div>
-    // </div>    
-    // `});
-
-
-
-
-
-
 })(ActionAppCore, $);
-
-
-
 
 
 
@@ -1493,7 +1362,7 @@ License: MIT
         this.pageTitle = this.options.pageTitle || '';
 
         this.linkDisplayOption = this.options.linkDisplayOption || "both"
-        this.hasRefreshed = false;
+        this._activatedFlag = false;
         //this.pageTemplate = this.options.pageTemplate || '';
         this.layoutOptions = this.options.layoutOptions || false;
 
@@ -1578,8 +1447,8 @@ License: MIT
             this.app = theApp;
         }
 
-        if (typeof (this.preInit) == 'function') {
-            this.preInit(this.app)
+        if (typeof (this._onPreInit) == 'function') {
+            this._onPreInit(this.app)
         }
 
         if (this.app && this.pageActionPrefix && this.pageActionPrefix != '') {
@@ -1608,15 +1477,12 @@ License: MIT
                 }
                 return tmpRet;
             };
-             
 
-            //var tmpContentHTML = $.templates[this.pageTemplate].render(this);
             this.parentEl = this.app.getByAttr$({ group: "app:pages", item: this.pageName })
-            //this.parentEl.html(tmpContentHTML);
             this.parentEl.html(this.getLayoutHTML());
 
-            if (typeof (this.compInit) == 'function') {
-                this.compInit(this.app)
+            if (typeof (this._onInit) == 'function') {
+                this._onInit(this.app)
             }
 
             if (this.layoutOptions && this.layoutConfig) {
@@ -1665,15 +1531,14 @@ License: MIT
 
     function onActivateThisPage() {
         //-refresh local message details everytime we change to this view
-        if(typeof(this._onLoad) == 'function'){
-            this._onLoad();
+        if (!this._activatedFlag) {
+            this._activatedFlag = true;
+            if(typeof(this._onFirstActivate) == 'function'){
+                this._onFirstActivate();
+            }
         }
-        if (this.hasRefreshed) {
-            return;
-        }
-        this.hasRefreshed = true;
-        if(typeof(this._onFirstLoad) == 'function'){
-            this._onFirstLoad();
+        if(typeof(this._onActivate) == 'function'){
+            this._onActivate();
         }
     }
     
