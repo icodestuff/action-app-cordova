@@ -41,7 +41,8 @@ License: MIT
     *    If your component need to do stuff to be availale in the background, do it here
     */
     ThisPage._onPreInit = function(){
-        console.log("Log Page: _onPreInit");
+        ThisPage.om = ThisPage.om || ThisApp.getComponent("plugin:ObjectManager");
+        console.log("Log Page: _onPreInit ",ThisPage.om);
     }
     ThisPage._onInit = function() {
         console.log("Log Page: _onInit");

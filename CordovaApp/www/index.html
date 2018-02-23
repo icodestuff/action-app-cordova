@@ -168,8 +168,13 @@
               <i class="sidebar icon"></i>
               Menu
             </a>
+            <div class="right menu">
+              <svg facet="dash:zoom-control" style="height:35px;width:200px;background-color:white;margin-right:5px;"></svg>
+              <a appaction="dash:zoomWorkspaceDown" class="ui button blue basic small">-</a>
+              <a appaction="dash:zoomWorkspaceUp" class="ui button blue basic small">+</a>
+            </div>
           </div>
-        
+          
         <div class="ui bottom attached segment pushable">
           <div class="ui inverted labeled icon left inline vertical sidebar menu">
             <a class="item">
@@ -481,6 +486,10 @@
   <script src="lib/handlebars/handlebars.min.js"></script>
   <script src="lib/toastr/toastr.min.js"></script>
 
+  <script src="lib/pouchdb/pouchdb.min.js"></script>
+  <script src="lib/pouchdb/pouchdb.authentication.min.js"></script>
+  <script src="lib/pouchdb/pouchdb.find.js"></script>
+
   <script src="lib/jqueryui/jquery-ui.min.js"></script>
   <script src="lib/layout/jquery.layout-latest.js"></script>
   
@@ -491,8 +500,12 @@
   <script src="lib/actionapp/actionapp.js"></script>
   <script src="app/app-module.js"></script>
 
+  <!-- JQuery - Custom Plugins -->
+  <script src="plugins/data-manager-plugin.js"></script>
+
   <!-- Application Plugins -->
   <script src="plugins/svg-controls-plugin.js"></script>
+  <script src="plugins/object-manager-plugin.js"></script>
 
   <!-- Application Pages -->
   <script src="app/app-dashboard-page.js"></script>

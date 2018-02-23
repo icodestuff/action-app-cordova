@@ -50,7 +50,7 @@ SVG controls Plugin:
         }
     }
     var me = ThisPageController.prototype;
-    me.controlsBaseURL = "/catalog/controls/";
+    me.controlsBaseURL = "./catalog/controls/";
 
     me.svgDefsTemplateName = thisCompActionPrefix + ":defs";
 
@@ -78,17 +78,21 @@ SVG controls Plugin:
 
     me.svgDefsTemplateName = thisCompActionPrefix + ":defs";
 
-    me.controlsBaseURL = "/catalog/controls/";
+    me.controlsBaseURL = "./catalog/controls/";
     me.defsId = 'control-manager-defs-svg';
     //var controlCreateFunctions = {};
     var controlPromises = {};
 
     me.initSvgDefsContainer = function () {
+        //--- Creating this on the fly was an issue in cordova/win
+        //     when using position:absolute; top:10000; (removed that part)
         //--- Create Global Defs Area for commonly referenced DEFs from SVGs
         //    ** this is to allow multiple instances of an SVG that references IDs **        
         var tmpNewDiv = $('<div />').appendTo('body');
-        var tmpContent = $.templates[me.svgDefsTemplateName].render();
-        tmpNewDiv.html(tmpContent);
+        //var tmpContent = $.templates[me.svgDefsTemplateName].render();
+        tmpNewDiv.html('<svg id="control-manager-defs-svg"></svg>');
+       
+        //style="position:absolute; top:-100000; "
         me.svgDefsContainerNode = d3.select('#' + me.defsId).node();
     }
     me.addDefs = function (theDefsNode) {
@@ -138,11 +142,11 @@ SVG controls Plugin:
         me.controlPromises(theControlName) = thePromise;
     }
 
-    var tmpModuleTemplates = {};
+    // var tmpModuleTemplates = {};
 
-    tmpModuleTemplates[me.svgDefsTemplateName] = '<svg id="control-manager-defs-svg" style="position:absolute; top:-100000; "></svg>';
+    // tmpModuleTemplates[me.svgDefsTemplateName] = '<svg id="control-manager-defs-svg" style="position:absolute; top:-100000; "></svg>';
 
-    $.templates(tmpModuleTemplates);
+    // $.templates(tmpModuleTemplates);
 
 
 })(ActionAppCore, $);

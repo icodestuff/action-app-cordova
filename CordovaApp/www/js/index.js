@@ -119,7 +119,7 @@
           */
           var appModule = ActionAppCore.module('app');
          
-          var tmpPluginComponents = []; //'DataTables'
+          var tmpPluginComponents = ['ObjectManager','SvgControls']; //'DataTables' //'ObjectManager', 
           //'LayoutPage', 'PouchPage', 'DataTablesPage', 'WorkspacesPage', 'LogsPage'
           var tmpAppCompsToInit = ['DashboardPage', 'WorkspacesPage', 'LogsPage']; //, 'LogsPage'
           //var tmpAppCompsToInit = ['PuppetShow', 'LogsPage'];
