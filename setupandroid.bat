@@ -1,3 +1,3 @@
 cd CordovaApp
-cordova platform install android
+cordova platform add android
 cordova build android

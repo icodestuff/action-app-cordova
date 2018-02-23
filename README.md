@@ -57,15 +57,20 @@ Then open the browser to
 [http://localhost:7070/]
 
 To install for android ...
- - cd CordovaApp
- - cordova platform add android
- - cd .. (to go back)
+ - ./setupandroid
 
+To install for windows ...
+ - ./setupwin
+ 
 To run on an android emulator ..
  - ./emulate
 
 To run on an android phone ..
  - ./tophone
+
+To run on windows 10 ..
+ - ./runwin
+
 
 ## More about the Action Application Environment
 
