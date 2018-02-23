@@ -58,6 +58,22 @@ License: MIT
             me.wsZoomControl.subscribe("valueChanged", me.zoomValueChanged.bind(me));
         });
 
+        var tmpWatsonIconEl = me.getByAttr$({ facet: "dash:watson-icon" });
+        me.wsWatsonIconWS = me._svg.getNewWorkpace();
+        me.wsWatsonIconWS.init({ svg: tmpWatsonIconEl[0], viewBox: {x: 0, y: 0, w: 50, h: 50} });
+        me.wsWatsonIconWS.addControl('icon-watson', 'icon-watson', {scale: .5 }).then(function(theControl){
+            me.wsWatsonIcon = theControl;
+            //me.wsWatsonIcon.subscribe("valueChanged", me.zoomValueChanged.bind(me));
+        });
+
+        var tmpDatabaseIconEl = me.getByAttr$({ facet: "dash:database-icon" });
+        me.wsDatabaseIconWS = me._svg.getNewWorkpace();
+        me.wsDatabaseIconWS.init({ svg: tmpDatabaseIconEl[0], viewBox: {x: 0, y: 0, w: 150, h: 150} });
+        me.wsDatabaseIconWS.addControl('icon-database', 'icon-database', {scale: 1 }).then(function(theControl){
+            me.wsDatabaseIcon = theControl;
+            //me.wsDatabaseIcon.subscribe("valueChanged", me.zoomValueChanged.bind(me));
+        });
+
 
     }
 

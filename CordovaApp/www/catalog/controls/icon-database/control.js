@@ -69,14 +69,14 @@
     me.onClick = function (e) {
         //console.log("click", e);
         if (e && e.detail && e.ctrlKey !== true) {
-            if (e.detail > 1) {
+           // if (e.detail > 1) {
                 this.iconTypeAt++;
                 if (this.iconTypeAt >= me.iconTypes.length) {
                     this.iconTypeAt = 0;
                 }
                 var tmpNewIconType = me.iconTypes[this.iconTypeAt];
                 this.setIconType(tmpNewIconType);
-            }
+           // }
         }
     }
 
