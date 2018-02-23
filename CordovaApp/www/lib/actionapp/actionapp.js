@@ -1218,9 +1218,10 @@ var ActionAppCore = {};
         return false;
     }
 
-
+    //--- ToDo - Implement better message center with toastr as UI option or toastless
     function initMessageCenter() {
         toastr.options.closeButton = true;
+        toastr.options.timeOut = 1000;
         /*
         //--- Some other available options
         toastr.options.timeOut = 2000;

@@ -49,6 +49,7 @@
 
   <link rel="stylesheet" type="text/css" href="lib/jqueryui/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="lib/layout/layout-default-latest.css">
+  <link rel="stylesheet" href="lib/contextmenu/dist/jquery.contextMenu.min.css">
 
   <!-- app level css overrides last -->
   <link rel="stylesheet" href="css/appframe.css">
@@ -412,9 +413,9 @@
               <div action="logs:sendTestMessages" class="ui primary basic button">Send Messages</div> &#160;
               <div action="logs:clearMessageCenter" class="ui primary basic button">Clear Messages</div> &#160;
               <div action="logs:runTest" class="ui primary basic button">Run Test</div>&#160;
-              <div action="logs:runTest" class="ui primary basic button">Run Test</div>&#160;
-              <div action="logs:runTest" class="ui primary basic button">Run Test</div>&#160;
-              <div action="logs:runTest" class="ui primary basic button">Run Test</div>
+              <div action="logs:runTest2" class="ui primary basic button">Run Test 2</div>&#160;
+              <div action="logs:runTest3" class="ui primary basic button">Run Test 3</div>&#160;
+              <div action="logs:runTest4" class="ui primary basic button">Run Test 4</div>
             </div>
           </div>
           <div facet="logs-messages"> No Messages. </div>
@@ -466,11 +467,15 @@
 
 
   <!--   End of page *****************************************  -->
+
+  <!-- Cordova Only -->  
   <script type="text/javascript" src="cordova.js"></script>
 
+  <!-- Standard Libraries -->  
   <script src="lib/jqueryui/external/jquery/jquery.js"></script>
   <script src="lib/base/jquery-plugins.js"></script>
   <script src="lib/semantic/dist/semantic.min.js"></script>
+  <script src="lib/d3/d3.min.js"></script>
   <script src="lib/rangeslider/dist/rangeslider.min.js"></script>
   <script src="lib/jsrender/jsrender.min.js"></script>
   <script src="lib/handlebars/handlebars.min.js"></script>
@@ -479,14 +484,23 @@
   <script src="lib/jqueryui/jquery-ui.min.js"></script>
   <script src="lib/layout/jquery.layout-latest.js"></script>
   
+  <script src="lib/contextmenu/dist/jquery.ui.position.min.js"></script>
+  <script src="lib/contextmenu/dist/jquery.contextMenu.min.js"></script>
+
+
   <script src="lib/actionapp/actionapp.js"></script>
   <script src="app/app-module.js"></script>
 
+  <!-- Application Plugins -->
+  <script src="plugins/svg-controls-plugin.js"></script>
+
+  <!-- Application Pages -->
   <script src="app/app-dashboard-page.js"></script>
   <script src="app/app-workspaces-page.js"></script>
   <script src="app/app-logs-page.js"></script>
   
-    <script type="text/javascript" src="js/index.js"></script>
+  <!-- Application Launch Script -->
+  <script type="text/javascript" src="js/index.js"></script>
 
 </body>
 
