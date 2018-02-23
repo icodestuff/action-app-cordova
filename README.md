@@ -45,9 +45,12 @@ While the environment is well suited for all web development, this package is sp
 ## Getting Started
 * Download and install node.js, assure npm is working
 * Download and install Android Studio, setup an emulator, create a Hello World application and deploy to the emulator and your phone.
+* If running the windows version, download, install Visual Studio and the related Xamarin / Cordova tools
+
 * Clone / download this repo and load it up
-* Assure you have Visual Code or similar
-* Open the base directory in the console / command prompt
+* Assure you have Visual Studio Code or similar web IDE with GIT and Terminal capacity (just use VSCode)
+
+* Open the base directory in the console / command prompt / termINAL
 
 To run on a webpage .. at the console type this ...
 - npm install
