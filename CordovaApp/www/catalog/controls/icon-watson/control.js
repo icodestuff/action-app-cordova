@@ -88,7 +88,7 @@
 
                     icon: function (opt, $itemElement, itemKey, item) {
                         // Set the content to the menu trigger selector and add an bootstrap icon to the item.
-                        $itemElement.html('<div class="ui fluid button  purple basic">Bring to top</div>');
+                        $itemElement.html('<button class="ui icon button purple basic context">Bring to top</button>');
                         // Add the context-menu-icon-updated class to the item
                         return '';
                     },
@@ -109,7 +109,7 @@
 
                     icon: function (opt, $itemElement, itemKey, item) {
                         // Set the content to the menu trigger selector and add an bootstrap icon to the item.
-                        $itemElement.html('<div class="ui fluid button  purple basic">Reset</div>');
+                        $itemElement.html('<button class="icon ui button blue basic context">Reset</button>');
                         // Add the context-menu-icon-updated class to the item
                         return '';
                     },
@@ -122,7 +122,7 @@
 
                     icon: function (opt, $itemElement, itemKey, item) {
                         // Set the content to the menu trigger selector and add an bootstrap icon to the item.
-                        $itemElement.html('<div class="ui basic red vertical labeled icon buttons"><button class="ui button"><i class="delete icon"></i>Remove Me</button></div>');
+                        $itemElement.html('<button class="icon ui button red basic context"><i class="delete icon"></i>&#160;Remove Me</button>');
                         // Add the context-menu-icon-updated class to the item
                         return '';
                     },
