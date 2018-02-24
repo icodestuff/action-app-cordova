@@ -979,14 +979,49 @@ var ActionAppCore = {};
     }
 
     /**
+     * Template Manager Functionality 
+     * 
+     *    Common method of getting templated HTML
+     *
+     */
+        
+    /**
      * getTemplatedContent
-     *    - Returns HTML rendered from a template using jsrender
+     * 
+     *    Common method of getting templated content by name
+     *
+     * @param  {String} theTemplateName   [The name of the template to pull]
+     * @param  {Object} theData   Optional, needed if template expects one
+     * @param  {Object} theOptions   Optional, any options supported by this or calling methods
+     * @return void
+     */
+    me.getTemplatedContent = function (theTemplateName, theData, theOptions) {
+
+        return me.getTemplatedContentFromJSRender(theTemplateName, theData);
+    }
+    me.tplIndex = {};
+
+    //--- More stuff to create... ====================
+    me.loadTemplateIndex = function (theIndex, theOptions) {
+        //--- Tells the templating where to find pages
+    }
+    me.loadTemplateOptions = function (theOptions) {
+        //--- Tells the templating engine stuff like where to find
+    }
+    me.loadTemplateHTML = function (theTemplateName, theHTML, theOptions) {
+        //--- Adds HTML by name, the templating engine will determine what to do
+    }
+
+
+    /**
+     * getTemplatedContentFromJSRender
+     *    - Returns HTML rendered from a template using jsRender
      *
      * @param  {String} theActionDelegateName   [the prefix to use (do not iclude the ":")]
      * @param  {Function} theDelegate   [The standard "Action" function to handle the action pass (action name, target object)]
      * @return void
      */
-    me.getTemplatedContent = function (theOptionsOrTemplateName, theDataIfNotObject) {
+    me.getTemplatedContentFromJSRender = function (theOptionsOrTemplateName, theDataIfNotObject) {
         var tmpTemplateName = theOptionsOrTemplateName;
         var tmpData = theDataIfNotObject;
         if (typeof (theOptionsOrTemplateName) == 'object') {

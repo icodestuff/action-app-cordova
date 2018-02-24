@@ -44,7 +44,7 @@ License: MIT
         });
     }
     ThisPage.runTest3 = function(){
-        ThisPage._om.getObject('[get]', './appdata/default.json').then(function (theDoc) {
+        ThisPage._om.getObject('[get]', './app-data/default.json').then(function (theDoc) {
             console.log('got from get ',theDoc);
             ThisApp.showMessage("Got doc - " + typeof(theDoc));
             ThisApp.showMessage(" doc is - " + JSON.stringify(theDoc));
@@ -52,7 +52,7 @@ License: MIT
     }
     ThisPage.runTest4 = function(){
         console.log("runTest4");
-        ThisPage._om.getObject('[html]', './apptpl/hello.html').then(function (theHTML) {
+        ThisPage._om.getObject('[html]', './app-tpl/hello.html').then(function (theHTML) {
             console.log('got from html ',theHTML);
             ThisApp.showMessage("Got html - " + typeof(theHTML));
             ThisApp.showMessage(" html is - " + theHTML);

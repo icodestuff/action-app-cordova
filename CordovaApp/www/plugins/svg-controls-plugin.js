@@ -50,7 +50,8 @@ SVG controls Plugin:
         }
     }
     var me = ThisPageController.prototype;
-    me.controlsBaseURL = "./catalog/controls/";
+    //---ToDo: Duplicate, pull from somewhere unified?
+    me.controlsBaseURL = "./svg-catalog/controls/";
 
     me.svgDefsTemplateName = thisCompActionPrefix + ":defs";
 
@@ -78,7 +79,8 @@ SVG controls Plugin:
 
     me.svgDefsTemplateName = thisCompActionPrefix + ":defs";
 
-    me.controlsBaseURL = "./catalog/controls/";
+    //---ToDo: Duplicate, pull from somewhere unified?
+    me.controlsBaseURL = "./svg-catalog/controls/";
     me.defsId = 'control-manager-defs-svg';
     //var controlCreateFunctions = {};
     var controlPromises = {};
