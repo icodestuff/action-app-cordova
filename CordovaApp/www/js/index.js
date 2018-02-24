@@ -73,23 +73,6 @@
   var btnTest,
   testOutput;
 
-  //---- End general variables
-  // function compileTemplates(theOptionalAttrName){
-  //   var tmpAttrName = theOptionalAttrName || "data-tpl";
-  //   var tmpSelector = {};
-  //   //--- Init what to look for, anything with this attribute
-  //   tmpSelector[tmpAttrName] = "";
-  //   var tmpAllTemplates = {};
-  //   //--- Get all elements with this attribute
-  //   ThisApp.getByAttr$(tmpSelector).each(function(theIndex) {
-  //     var tmpEl$ = $(this);
-  //     var tmpKey = "" + tmpEl$.attr(tmpAttrName);
-  //     //--- Add innerHTML to the templates object
-  //     tmpAllTemplates[tmpKey] = this.innerHTML;
-  //   });
-  //   //--- Compile them all at once
-  //   $.templates(tmpAllTemplates);
-  // }
 
   var tmpAt = 0;
   function setup(){

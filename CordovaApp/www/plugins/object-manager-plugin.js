@@ -102,36 +102,13 @@ Source Handlers:  ("name" = function or name of other handler.)
         }
     }
 
-    me.test = test;
-    function test() {
-        return ('Object Manager test');
-    }
 
-    me.testAction = function () {
-        alert('Object Manager Testing');
-    }
 
     me.init = init;
     function init() {
         ThisApp.registerActionDelegate("_om", runAction);
         return this;
     }
-
-
-    //--- Impl ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
-    //--- Impl ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
-    //--- Impl ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
-
-
-    //--- Templates ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
-    //--- ========  ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
-    //--- ========  ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
-
-    var tmpModuleTemplates = {};
-
-    tmpModuleTemplates["_om:about-this-plugin"] = '<div class="ui segment basic">This plugin handles general object management functionality is a common / abstracted way.</div>';
-
-    $.templates(tmpModuleTemplates);
 
 
 

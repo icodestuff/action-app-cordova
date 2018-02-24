@@ -1000,6 +1000,10 @@ var ActionAppCore = {};
         return me.getTemplatedContentFromJSRender(theTemplateName, theData);
     }
     me.tplIndex = {};
+    
+    // *******************
+    //=== ToDo: Move to extension so each thing can have it's own templating engine / namespace / object
+    // *******************
 
     //--- More stuff to create... ====================
     me.loadTemplateIndex = function (theIndex, theOptions) {
@@ -1010,6 +1014,7 @@ var ActionAppCore = {};
     }
     me.loadTemplateHTML = function (theTemplateName, theHTML, theOptions) {
         //--- Adds HTML by name, the templating engine will determine what to do
+        
     }
 
 

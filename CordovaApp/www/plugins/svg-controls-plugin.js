@@ -91,10 +91,7 @@ SVG controls Plugin:
         //--- Create Global Defs Area for commonly referenced DEFs from SVGs
         //    ** this is to allow multiple instances of an SVG that references IDs **        
         var tmpNewDiv = $('<div />').appendTo('body');
-        //var tmpContent = $.templates[me.svgDefsTemplateName].render();
         tmpNewDiv.html('<svg id="control-manager-defs-svg"></svg>');
-       
-        //style="position:absolute; top:-100000; "
         me.svgDefsContainerNode = d3.select('#' + me.defsId).node();
     }
     me.addDefs = function (theDefsNode) {
@@ -143,13 +140,6 @@ SVG controls Plugin:
     me.resolveWhenLoaded = function (theControlName, thePromise) {
         me.controlPromises(theControlName) = thePromise;
     }
-
-    // var tmpModuleTemplates = {};
-
-    // tmpModuleTemplates[me.svgDefsTemplateName] = '<svg id="control-manager-defs-svg" style="position:absolute; top:-100000; "></svg>';
-
-    // $.templates(tmpModuleTemplates);
-
 
 })(ActionAppCore, $);
 
