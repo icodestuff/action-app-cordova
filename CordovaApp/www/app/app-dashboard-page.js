@@ -50,6 +50,14 @@ License: MIT
             ThisApp.showMessage(" doc is - " + JSON.stringify(theDoc));
         });
     }
+    ThisPage.runTest4 = function(){
+        console.log("runTest4");
+        ThisPage._om.getObject('[html]', './apptpl/hello.html').then(function (theHTML) {
+            console.log('got from html ',theHTML);
+            ThisApp.showMessage("Got html - " + typeof(theHTML));
+            ThisApp.showMessage(" html is - " + theHTML);
+        });
+    }
 
     ThisPage._onInit = function(theApp) {
         ThisPage._svg = theApp.getComponent("plugin:SvgControls");

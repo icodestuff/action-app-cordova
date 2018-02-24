@@ -420,6 +420,7 @@ $.fn.NoSqlDataManager = (function ($) {
         "[couch]": sourceHandlerForNoSQL,
         "[cloudant]": sourceHandlerForNoSQL,
         "[get]": sourceHandlerForAjaxGet,
+        "[html]": sourceHandlerForAjaxGetHTML,
         "[ajax]": sourceHandlerForAjaxPost
     }
     var sourceHandlerOptions = {
@@ -594,8 +595,14 @@ $.fn.NoSqlDataManager = (function ($) {
         return dfd.promise();
     }
 
+    //--- Simple URL get method for HTML files (templates usually)
+    me.sourceHandlerForAjaxGetHTML = sourceHandlerForAjaxGet;
+    function sourceHandlerForAjaxGetHTML(theAction, theOptions) {
+        //--- Merge from theOptions if supporting more options
+        return sourceHandlerForAjaxGet(theAction, {dataType:'html'});
+    }
     
-    //--- Simple URL get method
+    //--- Simple URL get method, default type is json for returning objects
     me.sourceHandlerForAjaxGet = sourceHandlerForAjaxGet;
     function sourceHandlerForAjaxGet(theAction, theOptions) {
         var dfd = jQuery.Deferred();
