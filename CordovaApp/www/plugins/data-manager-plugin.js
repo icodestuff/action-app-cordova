@@ -535,7 +535,8 @@ $.fn.NoSqlDataManager = (function ($) {
                 }
                 dfd.resolve(theDoc);
             }).catch(function (err) {
-                dfd.reject("Error getting document from nosql db. " + err.toString());
+                //dfd.reject("Error getting document from nosql db. " + err.toString());
+                dfd.reject(err);
             });
         } else if (tmpAction == 'put') {
             var tmpDoc = theAction.doc || false;

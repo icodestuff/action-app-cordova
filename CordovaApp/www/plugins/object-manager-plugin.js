@@ -72,8 +72,43 @@ Source Handlers:  ("name" = function or name of other handler.)
 
     me.getObjectHandler = dataMgr.getDocumentHandler;
     me.putSourceHandler = dataMgr.putSourceHandler;
-    me.getObject = dataMgr.getDocument;
-    me.getObjects = dataMgr.getDocuments;
+    //--- By default, getting an object is a one call / reply deal
+    //--   By default the return object will have and ["_error"] property which may be ..
+     // a populated string, which is the error text
+     // a number over zero, the error number
+     // an object with .errorText, .errorNum, (TBD???)
+    me.getObject = getObject;
+    function getObject(theSourceName, thePath){
+        var dfd = jQuery.Deferred();
+        dataMgr.getDocument(theSourceName, thePath).then(
+            function(theDoc) {
+                dfd.resolve(theDoc);
+              },
+              function(theError) {
+                var tmpRetDoc = {};
+                tmpRetDoc._error = theError;
+                dfd.resolve(tmpRetDoc);
+              }
+        )
+        return dfd.promise();
+    }
+    //me.getObjects = dataMgr.getDocuments;
+    me.getObjects = getObjects;
+    function getObjects(theSourceName, theKeys){
+        var dfd = jQuery.Deferred();
+        dataMgr.getObjects(theSourceName, theKeys).then(
+            function(theDocs) {
+                dfd.resolve(theDocs);
+              },
+              function(theError) {
+                var tmpRetDoc = {};
+                tmpRetDoc._error = theError;
+                dfd.resolve(tmpRetDoc);
+              }
+        )
+        return dfd.promise();
+    }
+    
     me.putObject = dataMgr.putDocument;
     me.deleteObject = dataMgr.deleteDocument;
 

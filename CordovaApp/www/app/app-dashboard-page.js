@@ -29,18 +29,26 @@ License: MIT
     //--- Hook into the app lifecycle as needed    
     
     ThisPage.runTest = function(){
-        var tmpObj = {"running":"a test", "more":12, "arr":["one","two"], "child": {"name":"Jack"}};
-        ThisPage._om.putObject('dash-test-db', 'testdoc', tmpObj).then(function (theDoc) {
+        var tmpObj = {"running":"a test", "more":12, "arr":["one","two"], "child": {"name":"Jane"}};
+        ThisPage._om.putObject('dash-test-db', 'testdoc2', tmpObj).then(function (theDoc) {
             console.log('saved ',theDoc);
             ThisApp.showMessage("Saved doc - " + typeof(theDoc));
             ThisApp.showMessage(" doc is - " + JSON.stringify(theDoc));
         });
     }
     ThisPage.runTest2 = function(){
-        ThisPage._om.getObject('dash-test-db', 'testdoc').then(function (theDoc) {
+        ThisPage._om.getObject('dash-test-db', 'testdoc2').then(function (theDoc) {
             console.log('got ',theDoc);
-            ThisApp.showMessage("Got doc - " + typeof(theDoc));
-            ThisApp.showMessage(" doc is - " + JSON.stringify(theDoc));
+            if( theDoc._error ){
+                var tmpMsg = theDoc._error;
+                if(typeof(tmpMsg) == 'object'){
+                    tmpMsg = tmpMsg.message || tmpMsg.errorText || 'unknown error';
+                }
+                ThisApp.showMessage(tmpMsg, "e")
+            } else {
+                //ThisApp.showMessage("Got doc - " + typeof(theDoc));
+                ThisApp.showMessage("Got document - JSON is - " + JSON.stringify(theDoc));
+            }
         });
     }
     ThisPage.runTest3 = function(){
