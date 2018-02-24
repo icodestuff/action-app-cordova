@@ -86,18 +86,12 @@ var ActionAppCore = {};
 
 //--- Common Modules --- --- --- --- --- --- --- --- --- --- --- --- 
 (function (ActionAppCore, $) {
-
     ActionAppCore.createModule("site");
     ActionAppCore.createModule("plugin");
     ActionAppCore.createModule("extension");
-
 })(ActionAppCore, $);
 
-
-
 //--- Common Functionality Extensions
-
-
 
 /**
      * subscribe / unsubscribe / publish
@@ -1420,22 +1414,6 @@ License: MIT
     }
 
 
-    //======================================
-    //======================================
-    //======================================
-
-    this.getLayoutHTML = function(){
-        var tmpRet = "";
-        var tmpAll = ['north','south','center', 'east','west'];
-        var tmpPre = this.layoutOptions.facetPrefix;
-        for(var i = 0 ; i < tmpAll.length ; i++){
-            var tmpArea = tmpAll[i];
-            if( this.layoutOptions[tmpArea] !== false){
-                tmpRet += '<div facet="' + tmpPre + ':' + tmpArea+ '" class="middle-' + tmpArea+ '"></div>';    
-            }
-        }
-        return tmpRet;
-    };
     //======================================
     //======================================
     //======================================
