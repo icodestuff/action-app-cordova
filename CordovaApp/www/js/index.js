@@ -99,6 +99,9 @@
           ThisApp = new siteMod.CoreApp();
           ThisApp.compileTemplates();
           ThisApp.compileHandlebars();
+
+          //--- Setup global access to OM
+          ThisApp.om = ThisApp.getComponent("plugin:ObjectManager");
   
           /* ****************************************
           //------------ This App Config

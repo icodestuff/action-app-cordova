@@ -419,11 +419,12 @@ $.fn.NoSqlDataManager = (function ($) {
         "[pouch]": sourceHandlerForPouch,
         "[couch]": sourceHandlerForNoSQL,
         "[cloudant]": sourceHandlerForNoSQL,
-        "[ajax]": sourceHandlerForAjax
+        "[get]": sourceHandlerForAjaxGet,
+        "[ajax]": sourceHandlerForAjaxPost
     }
     var sourceHandlerOptions = {
         "[couch]": { auth: { username: '', password: '' } },
-        "[ajax]": { ajax: { url: '/actions/nosql' } }
+        "[ajax]": { ajax: { url: './' } }
     }
     me.putSourceHandlerDefaults = putSourceHandlerDefaults;
     function putSourceHandlerDefaults(theSourceName, theDefaultOptions) {
@@ -593,8 +594,40 @@ $.fn.NoSqlDataManager = (function ($) {
         return dfd.promise();
     }
 
-    me.sourceHandlerForAjax = sourceHandlerForAjax;
-    function sourceHandlerForAjax(theAction, theOptions) {
+    
+    //--- Simple URL get method
+    me.sourceHandlerForAjaxGet = sourceHandlerForAjaxGet;
+    function sourceHandlerForAjaxGet(theAction, theOptions) {
+        var dfd = jQuery.Deferred();
+       
+        var tmpAction = theAction.action || 'get';
+        var tmpURL = theAction.location || '';
+        var tmpDataType = "json";
+        if( theOptions && theOptions.dataType ){
+            tmpDataType = theOptions.dataType;
+        }
+        if (!(tmpURL)) {
+            dfd.reject("No url to get");
+            return dfd.promise();
+        }
+
+        $.ajax({
+            url: tmpURL,
+            method: 'GET',
+            dataType: tmpDataType,
+            success: function (theResponse) {
+                dfd.resolve(theResponse);
+            },
+            error: function (theError) {
+                dfd.reject("No URL setup to handle this ajax call: " + theError);
+            }
+        });
+        return dfd.promise();
+
+    }
+
+    me.sourceHandlerForAjaxPost = sourceHandlerForAjaxPost;
+    function sourceHandlerForAjaxPost(theAction, theOptions) {
         var dfd = jQuery.Deferred();
         theAction.options = theOptions || {};
 
@@ -610,7 +643,7 @@ $.fn.NoSqlDataManager = (function ($) {
 
         $.ajax({
             url: theAction.options.ajax.url,
-            data: theAction,
+            data: theAction.options.ajax.data || theAction.data || theAction,
             method: 'POST',
             dataType: "json",
             success: function (theResponse) {
