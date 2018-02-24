@@ -42,10 +42,10 @@ Source Handlers:  ("name" = function or name of other handler.)
   "[default]" = the default handler if none is provided, [pouch] by default.
   "[pouch]" = Handler specifically for local pouch storage, where create and destroy requires no special privs
   "[couch]" = Handler for a (usually local) couch database
-  "[ajax]" = Handler for any external ajax handler that follows the known protocol
+  "[ajax]" = Handler for any external ajax handler that follows the known protocol for gets/set routines
+  "[get]": Handler to get a JSON object via ajax get url
+  "[html]": Handler to get HTML via ajax get url
 
-  TBD: 
-  "[cloudant]" = Handler for a cloudant *** not implemented, use couch
 
 */
 
