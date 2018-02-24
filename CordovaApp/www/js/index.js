@@ -157,16 +157,11 @@
             , center__onresize: ThisApp.resizeLayouts
           });
 
-   
           ThisApp.init();
-        
 
-  
           ThisApp.aboutThisApp = function(){
             ThisApp.showCommonDialog({ header: "About this application", content: {data:'', template:'app:about-this-app'} });
-  
           }
-
  
   
       } catch(ex){

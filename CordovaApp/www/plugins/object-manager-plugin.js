@@ -128,8 +128,11 @@ Source Handlers:  ("name" = function or name of other handler.)
     //--- ========  ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== 
 
     var tmpModuleTemplates = {};
+
     tmpModuleTemplates["_om:about-this-plugin"] = '<div class="ui segment basic">This plugin handles general object management functionality is a common / abstracted way.</div>';
+
     $.templates(tmpModuleTemplates);
+
 
 
 })(ActionAppCore, $);

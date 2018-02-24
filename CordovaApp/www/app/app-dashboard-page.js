@@ -28,8 +28,27 @@ License: MIT
 
     //--- Hook into the app lifecycle as needed    
     
+    ThisPage.runTest = function(){
+        var tmpObj = {"running":"a test"};
+        ThisPage._om.putObject('dash-test-db', 'testdoc', tmpObj).then(function (theDoc) {
+            console.log('saved ',theDoc);
+            ThisApp.showMessage("Saved doc - " + typeof(theDoc));
+            ThisApp.showMessage(" doc is - " + JSON.stringify(theDoc));
+        });
+    }
+    ThisPage.runTest2 = function(){
+        ThisPage._om.getObject('dash-test-db', 'testdoc').then(function (theDoc) {
+            console.log('got ',theDoc);
+            ThisApp.showMessage("Got doc - " + typeof(theDoc));
+            ThisApp.showMessage(" doc is - " + JSON.stringify(theDoc));
+        });
+    }
+
     ThisPage._onInit = function(theApp) {
         ThisPage._svg = theApp.getComponent("plugin:SvgControls");
+        ThisPage._om = theApp.getComponent("plugin:ObjectManager");
+
+         
     }
 
     ThisPage._onFirstActivate = function(theApp) {
@@ -74,6 +93,7 @@ License: MIT
             //me.wsDatabaseIcon.subscribe("valueChanged", me.zoomValueChanged.bind(me));
         });
 
+       
 
     }
 
