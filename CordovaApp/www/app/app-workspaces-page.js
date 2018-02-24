@@ -32,8 +32,8 @@ License: MIT
     //--- Hook into the app lifecycle as needed
     ThisPage._onFirstActivate = function() {
         var tmpContext = {}
-        ThisPage.loadRegion('center', tmpContext, thisSiteSpecs.pageActionPrefix + ':page-body');
-        ThisPage.loadRegion('south', tmpContext, thisSiteSpecs.pageActionPrefix + ':page-footer');
+        ThisPage.loadRegion('center', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-body', tmpContext));
+        ThisPage.loadRegion('south', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-footer', tmpContext));
 //        ThisPage.loadRegion('center', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-body', tmpContext));
 //        ThisPage.loadRegion('south', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-footer', tmpContext));
     }

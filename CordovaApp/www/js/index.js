@@ -81,8 +81,8 @@
           var siteMod = ActionAppCore.module('site');
           ThisApp = new siteMod.CoreApp();
           ThisApp.compileTemplates();
-          ThisApp.compileHandlebars();
-
+          //ThisApp.compileHandlebars();
+          
           //--- Setup global access to OM
           ThisApp.om = ThisApp.getComponent("plugin:ObjectManager");
   

@@ -92,24 +92,25 @@
   </div>
 
 
-  <div facet="site:global-dialog" class="hidden"></div>
+  
 
   <!-- <div app-use="app-loader"> <i class="huge icons"> <i class="big loading spinner icon"></i> </i> </div> -->
 
 <!--   Inline Templates === === === === === === === === === === === === === === ===  -->  
-<div style="display:none">
+<div style="display:none" appuse="templates">
   
   <!-- === === === ===  THIS APP TEMPLATES === === === === -->  
-  <script data-tpl="app:about-this-app" type="text/x-jsrender">
-      <div class="">
-          This is an application based on the ActionApp design and converted for Cordova Use.
-          <hr />
-          See the readme file and code for details.
-      </div>
-  </script>
-  <!-- <script data-tpl="app-logs-message-center-item" type="text/x-jsrender">
-    <div class="ui {{:type}} message" style="margin:0;margin-top:2px;"> <div class="header"> {{:title}} </div> {{:text}} </div>
-  </script> -->
+
+
+  <script data-htpl="app:about-this-app" type="text/x-htpl">
+    <div class="">
+        This is an application based on the ActionApp design and converted for Cordova Use.
+        <hr />
+        See the readme file and code for details.
+        <hr />
+        Note using Handlebars only - no more jsRender
+    </div>
+</script>
 
   <!-- === === === ===  Logs Page TEMPLATES === === === === -->  
   <script data-htpl="logs:msg-ctr-item" type="text/x-htpl">
@@ -313,11 +314,16 @@
         <div facet="site:dialog-actions" class="actions"></div>
       </div>        
 </script>
+
 <script data-htpl="tpl-side-menu-item" type="text/x-htpl">
-  <a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="item">{{:title}}</a>
+  {{#each navlinks}}
+    <a appuse="tablinks" group="app:pages" item="{{name}}" appaction="showPage" class="item">{{title}}</a>
+  {{/each}}
 </script>
 <script data-htpl="tpl-nav-menu-item" type="text/x-htpl">
-  <a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="item">{{:title}}</a>
+  {{#each navlinks}}
+    <a appuse="tablinks" group="app:pages" item="{{name}}" appaction="showPage" class="item">{{title}}</a>
+  {{/each}}
 </script>
 <script data-htpl="tpl-top-menu-item" type="text/x-htpl">
   {{if (display == "primary" || display == "both")}}<a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="mobilehidden item">{{:title}}</a>{{/if}}
@@ -325,153 +331,6 @@
 <script data-htpl="tpl-top-menu-button" type="text/x-htpl">
   <a appaction="{{:appaction}}" class="ui button">{{:title}}</a>
 </script>
-<script data-htpl="tpl-top-menu" type="text/x-htpl">
-  
-</script> 
-
-
-  <!-- === === === ===  APP FRAME TEMPLATES === === === === -->  
-  <script data-tpl="tpl-standard-loading-icon" type="text/x-jsrender">
-      <div>
-        <i class="huge icons">
-          <i class="big loading spinner icon"></i>
-        </i>
-      </div>
-  </script>
-  <!-- <script data-tpl="tpl-border-layout" type="text/x-jsrender">
-    {{if (layoutOptions.north != false)}}
-      <div facet="{{>layoutOptions.facetPrefix}}:north" class="middle-north">
-        {{if (layoutOptions.northContent)}}
-          {{:layoutOptions.northContent}}
-        {{/if}}
-      </div>
-    {{/if}}
-    {{if (layoutOptions.south != false)}}
-      <div facet="{{>layoutOptions.facetPrefix}}:south" class="middle-south">
-        {{if (layoutOptions.southContent)}}
-         {{:layoutOptions.southContent}}
-        {{/if}}
-      </div>
-    {{/if}}
-    <div facet="{{>layoutOptions.facetPrefix}}:center" class="middle-center">
-      {{if (layoutOptions.centerContent)}}
-        {{:layoutOptions.centerContent}}
-      {{/if}}
-    </div>
-    {{if (layoutOptions.west != false)}}
-    <div facet="{{>layoutOptions.facetPrefix}}:west" class="middle-west"> {{if (layoutOptions.westContent)}} {{:layoutOptions.westContent}} {{/if}} </div> {{/if}} {{if (layoutOptions.east != false)}}
-    <div facet="{{>layoutOptions.facetPrefix}}:east" class="middle-east"> {{if (layoutOptions.eastContent)}} {{:layoutOptions.eastContent}} {{/if}} </div> {{/if}}
-   </script> -->
-
-  <script data-tpl="tpl-common-global-dialog" type="text/x-jsrender">
-      <div appuse="global-dialog" class="ui modal">
-          <i class="close icon"></i>
-          <div facet="site:dialog-header" class="header"></div>
-          <div facet="site:dialog-content" class="content"> </div>
-          <div facet="site:dialog-actions" class="actions"></div>
-        </div>        
-  </script>
-
-
-  <script data-tpl="ws:page-footer" type="text/x-jsrender">
-    <div class="ui middle aligned divided list">
-      <div class="item">
-        <div class="left floated content">
-          <div class="ui button basic blue">Add</div>
-        </div>
-        <div class="content" >
-          <div style="height:35px;overflow:auto;">
-            Testing very long content long content long content long content long content long content long content long content long content long content long content
-          </div>
-        </div>
-      </div>
-    </div>
-  </script>
-
-  <script data-tpl="ws:page-body" type="text/x-jsrender">
-    <div class="ui segment fluid">
-      <h3 class="application-outline-header">
-        <span facet="dash:ws:loadedWorkspace">default</span>
-      </h3>
-      <div class="application-toolbar">
-        <div class="item" style="margin-bottom:5px">
-          <div class="ui icon input fluid">
-            <input value="[couch]:testdb" field="dash:ws:db-name" type="text" placeholder="Database Name...">
-            <i class="database blue icon"></i>
-          </div>
-        </div>
-        <div class="item" style="margin-bottom:5px">
-          <div class="ui icon input fluid">
-            <input value="default" field="dash:ws:workspace" type="text" placeholder="Database Name...">
-            <i class="group object blue icon"></i>
-          </div>
-        </div>
-        <a appaction="dash:newWorkspace" class="ui button blue basic large">New</a>
-        <a appaction="dash:loadWorkspace" class="ui button blue basic large">Open</a>
-        <a appaction="dash:saveWorkspace" class="ui button blue basic large">Save</a>
-      </div>
-    </div>
-      
-  </script>
-
-  <script data-tpl="logs:page-body" type="text/x-jsrender"></script>
-    <div>
-      <div appuse="cards" group="logs:tabs" item="activity">
-        <div class="ui" style="padding-top:5px;margin-top:0px;min-height:300px">
-          <div class="ui menu" style="padding-top:0;margin-top:0;overflow:auto;">
-            <div class="item">
-              <div action="logs:refreshMessageCenter" class="ui primary basic button">&#160;
-                <i class="icon refresh"></i>
-              </div> &#160;
-              <div action="logs:sendTestMessages" class="ui primary basic button">Send Messages</div> &#160;
-              <div action="logs:clearMessageCenter" class="ui primary basic button">Clear Messages</div> &#160;
-              <div action="logs:runTest" class="ui primary basic button">Run Test</div>&#160;
-              <div action="logs:runTest2" class="ui primary basic button">Run Test 2</div>&#160;
-              <div action="logs:runTest3" class="ui primary basic button">Run Test 3</div>&#160;
-              <div action="logs:runTest4" class="ui primary basic button">Run Test 4</div>
-            </div>
-          </div>
-          <div facet="logs-messages"> No Messages. </div>
-        </div>
-      </div>
-      <div appuse="cards" group="logs:tabs" item="jobs" class="hidden">
-        <div class="ui" style="padding-top:5px;margin-top:0px;min-height:300px">
-          <div class="ui menu segment nopad noshadow" style="overflow:auto;scroll-y:auto;padding-top:0;margin-top:0;">
-            <div class="item">
-              <div action="logs:addJobLog" class="ui green basic button site-tab-link">&#160;
-                <i class="icon add"></i>
-              </div>
-              <div action="logs:clearJobLogs" group="logs:job-tabs" class="ui green basic button site-tab-link">Close All</div>
-            </div>
-            <div appuse="tablinks-body" group="logs:job-tabs" facet="logs:job-tabs" class="item plain"> </div>
-          </div>
-          <div facet="logs-jobs" appuse="cards-body" group="logs:job-tabs"> </div>
-        </div>
-      </div>
-      <div appuse="cards" group="logs:tabs" item="archives" class="hidden"> Log Archives Content </div>
-    </div>
-  </script>
-
-  <script data-tpl="tpl-side-menu-item" type="text/x-jsrender">
-      <a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="item">{{:title}}</a>
-  </script>
-  <script data-tpl="tpl-nav-menu-item" type="text/x-jsrender">
-      <a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="item">{{:title}}</a>
-  </script>
-  <script data-tpl="tpl-top-menu-item" type="text/x-jsrender">
-      {{if (display == "primary" || display == "both")}}<a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="mobilehidden item">{{:title}}</a>{{/if}}
-  </script>
-  <script data-tpl="tpl-top-menu-button" type="text/x-jsrender">
-      <a appaction="{{:appaction}}" class="ui button">{{:title}}</a>
-  </script>
-  <script data-tpl="tpl-top-menu" type="text/x-jsrender">
-      <div class=" ui vertical masthead center aligned segment"> <div class="rem-ui rem-container"> {{if (title != null)}} <h1>{{:title}}</h1> {{/if}} <div appuse="topmenu" class="ui large secondary menu"> {{for navlinks tmpl="tpl-top-menu-item"/}} <div class="right item"> {{for navbuttons tmpl="tpl-top-menu-button"/}} </div> </div> </div> </div> 
-  </script> 
-<!---->
-
-  <!-- <script data-tpl="templatename">
-    HTML HERE
-  </script> -->
 
 
 

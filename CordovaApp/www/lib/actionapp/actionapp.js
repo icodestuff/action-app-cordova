@@ -995,9 +995,21 @@ var ActionAppCore = {};
      * @param  {Object} theOptions   Optional, any options supported by this or calling methods
      * @return void
      */
-    me.getTemplatedContent = function (theTemplateName, theData, theOptions) {
+    me.getTemplatedContent = function (theOptionsOrTemplateName, theDataIfNotObject, theOptions) {
+        var tmpTemplateName = theOptionsOrTemplateName;
+        var tmpData = theDataIfNotObject;
+        if (typeof (theOptionsOrTemplateName) == 'object') {
+            tmpTemplateName = theOptionsOrTemplateName.template;
+            tmpData = theOptionsOrTemplateName.data || theDataIfNotObject || '';
+        }
+        tmpData = tmpData || '';
+        if (!(tmpTemplateName)) {
+            console.error("Need to pass template name as a string or an object with a .template")
+            return;
+        }
 
-        return me.getTemplatedContentFromJSRender(theTemplateName, theData);
+        return me.renderTemplate(tmpTemplateName, tmpData, theOptions);
+        //return me.getTemplatedContentFromJSRender(theTemplateName, theData);
     }
     me.tplIndex = {};
     
@@ -1014,7 +1026,7 @@ var ActionAppCore = {};
     }
     me.loadTemplateHTML = function (theTemplateName, theHTML, theOptions) {
         //--- Adds HTML by name, the templating engine will determine what to do
-        
+
     }
 
 
@@ -1058,22 +1070,7 @@ var ActionAppCore = {};
      * @return void
      */
     me.compileTemplates = function(theOptionalAttrName, theOptionalTarget){
-        var tmpAttrName = theOptionalAttrName || "data-tpl";
-        var tmpSelector = {};
-        //--- Init what to look for, anything with this attribute
-        tmpSelector[tmpAttrName] = "";
-        var tmpAllTemplates = {};
-        //--- Get all elements with this attribute
-        ThisApp.getByAttr$(tmpSelector, theOptionalTarget).each(function(theIndex) {
-            var tmpEl$ = $(this);
-            var tmpKey = "" + tmpEl$.attr(tmpAttrName);
-            //--- Add innerHTML to the templates object
-            tmpAllTemplates[tmpKey] = "" + this.innerHTML;
-            //--- clear so there is only one
-            this.innerHTML = '';
-        });
-        //--- Compile them all at once
-        $.templates(tmpAllTemplates);
+       me.compileHandlebars(theOptionalAttrName, theOptionalTarget);
     }
 
     //me.htmlHandlebars = {};
@@ -1198,7 +1195,7 @@ var ActionAppCore = {};
 
     function initGlobalDialog() {
         var tmpNewDiv = $('<div facet="site:global-dialog" class="hidden"></div>').appendTo('body');
-        me.loadFacet(commonDialogFacet, '', 'tpl-common-global-dialog')
+        me.loadFacet(commonDialogFacet, me.renderTemplate('tpl-common-global-dialog') )
     }
 
     function initAppActions() {
@@ -1316,12 +1313,19 @@ var ActionAppCore = {};
         }
 
         //--- Standard functionality  ===================================
-        var tmpNavHTML = me.getTemplatedContent('tpl-side-menu-item',me.config.navlinks);
-        $('[appuse="side-menu"]').html(tmpNavHTML);
-        tmpNavHTML = me.getTemplatedContent('tpl-nav-menu-item',me.config.navlinks);
-        $('[appuse="nav-menu"]').html(tmpNavHTML);
-        var tmpHeaderHTML = me.getTemplatedContent('tpl-top-menu',me.config.navlinks);
-        $('[appuse="top-menu"]').html(tmpHeaderHTML);
+        var tmpNavHTML = '';
+        // var tmpNavHTML = me.getTemplatedContent('tpl-side-menu-item',me.config.navlinks);
+        // console.log("tmpNavHTML",tmpNavHTML);
+        // console.log("tmpNavHTML2",ThisApp.renderTemplate('tpl-side-menu-item',me.config));
+        $('[appuse="side-menu"]').html(ThisApp.renderTemplate('tpl-side-menu-item',me.config));
+        // tmpNavHTML = me.getTemplatedContent('tpl-nav-menu-item',me.config.navlinks);
+        // console.log("tmpNavHTML",tmpNavHTML);
+        // console.log("tmpNavHTML2",ThisApp.renderTemplate('tpl-side-menu-item',me.config));
+        $('[appuse="nav-menu"]').html(ThisApp.renderTemplate('tpl-side-menu-item',me.config));
+        
+        // var tmpHeaderHTML = me.getTemplatedContent('tpl-top-menu',me.config.navlinks);
+        // $('[appuse="top-menu"]').html(tmpHeaderHTML);
+        // $('[appuse="top-menu"]').html(ThisApp.renderTemplate('tpl-top-menu',me.config));
 
         initMenus();
         initAppActions();
