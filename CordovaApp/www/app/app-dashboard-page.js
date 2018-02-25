@@ -60,24 +60,29 @@ License: MIT
     }
     ThisPage.runTest4 = function(){
         console.log("runTest4");
-        var tmpList = ['./app-tpl/app-workspaces-page/footer.html','./app-tpl/app-workspaces-page/body.html'];
-        var tmpDefs = [];
-        var tmpTempls = [];
-        tmpDefs.push(
-            ThisPage._om.getObject('[html]','./app-tpl/app-workspaces-page/footer.html' ).then(function (theHTML) {
-                tmpTempls.footer = theHTML;
-            })
-        );
-        tmpDefs.push(
-            ThisPage._om.getObject('[html]','./app-tpl/app-workspaces-page/body.html' ).then(function (theHTML) {
-                tmpTempls.body = theHTML;
-            })
-        );
-        $.whenAll(tmpDefs).then(
-            function(){
-                console.log("Done",tmpTempls)
-            }
-        )
+        ThisPage._om.getObjects('[html]:app-tpl/app-workspaces-page', ['body.html','footer.html']).then(function (theDocs) {
+            console.log('got html get ',theDocs);
+            ThisApp.showMessage("Got html tpl's - " + typeof(theDocs));
+            //ThisApp.showMessage(" doc is - " + JSON.stringify(theDocs));
+        });
+        // var tmpList = ['./app-tpl/app-workspaces-page/footer.html','./app-tpl/app-workspaces-page/body.html'];
+        // var tmpDefs = [];
+        // var tmpTempls = [];
+        // tmpDefs.push(
+        //     ThisPage._om.getObject('[html]','./app-tpl/app-workspaces-page/footer.html' ).then(function (theHTML) {
+        //         tmpTempls.footer = theHTML;
+        //     })
+        // );
+        // tmpDefs.push(
+        //     ThisPage._om.getObject('[html]','./app-tpl/app-workspaces-page/body.html' ).then(function (theHTML) {
+        //         tmpTempls.body = theHTML;
+        //     })
+        // );
+        // $.whenAll(tmpDefs).then(
+        //     function(){
+        //         console.log("Done",tmpTempls)
+        //     }
+        // )
 }
 
     ThisPage._onInit = function(theApp) {
