@@ -1400,10 +1400,10 @@ License: MIT
         this.options = theOptions || {};
         this.pageName = this.options.pageName || '';
         this.pageActionPrefix = this.options.pageActionPrefix || '';
-        console.log("SP this.pageActionPrefix",this.pageActionPrefix)
+
         this.pageTitle = this.options.pageTitle || '';
         this.pageTemplates = this.options.pageTemplates || [];
-        
+        this.layoutTemplates = this.options.layoutTemplates || false;
 
         this.linkDisplayOption = this.options.linkDisplayOption || "both"
         this._activatedFlag = false;
@@ -1437,7 +1437,28 @@ License: MIT
     }
 
     var me = SitePage.prototype;
-    var that = this;
+    //var that = this;
+
+    me.initOnFirstLoad = function(){
+        var tmpThis = this;
+        this.initTemplates().then(
+            function(){
+                //--- if needed, if not it just exists
+                tmpThis.initLayoutTemplates();
+            }
+        );
+    }
+    me.initLayoutTemplates = function(){
+        if(!this.layoutTemplates){
+            return;
+        }
+        var tmpLOs = this.layoutTemplates;
+        var tmpContext = {}
+        for( var aName in tmpLOs ){
+            var tmpLO = tmpLOs[aName];
+            this.loadRegion(aName, ThisApp.renderTemplate(this.pageActionPrefix + ':' + tmpLO.tpl, tmpContext));
+        }
+    }
 
     me.initTemplates = function(){
         var dfd = jQuery.Deferred();

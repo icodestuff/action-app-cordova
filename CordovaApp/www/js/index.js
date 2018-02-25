@@ -83,7 +83,6 @@
 
           //THESE WILL GO AWAY
           ThisApp.compileTemplates();
-//          ThisApp.om = ThisApp.getComponent("plugin:ObjectManager");
           
           //--- Setup global access to OM
   

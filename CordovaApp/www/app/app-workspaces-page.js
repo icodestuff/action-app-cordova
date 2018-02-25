@@ -7,11 +7,20 @@ License: MIT
 
     var SiteMod = ActionAppCore.module("site");
     var AppModule = ActionAppCore.module("app");
+//                ThisPage.loadRegion('center', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-body', tmpContext));
 
     var thisSiteSpecs = {
         pageName:"WorkspacesPage", 
         pageTitle: "Workspaces", 
         pageActionPrefix: 'ws',
+        layoutTemplates: {
+            "center":{
+                tpl:'page-body'
+            },
+            "south":{
+                tpl:'page-footer'
+            }
+        },
         pageTemplates: ['page-body.html','page-footer.html'],
         linkDisplayOption:'both',
         appModule:AppModule
@@ -35,15 +44,18 @@ License: MIT
         ThisPage._om = theApp.om;
     }
 
+    // ThisPage.initLayoutTemplates = function(){
+    //     var tmpLOs = thisSiteSpecs.layoutTemplates;
+    //     var tmpContext = {}
+    //     for( var aName in tmpLOs ){
+    //         var tmpLO = tmpLOs[aName];
+    //         ThisPage.loadRegion(aName, ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':' + tmpLO.tpl, tmpContext));
+    //     }
+    // }
     //--- Hook into the app lifecycle as needed
     ThisPage._onFirstActivate = function() {
-        ThisPage.initTemplates().then(
-            function(){
-                var tmpContext = {}
-                ThisPage.loadRegion('center', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-body', tmpContext));
-                ThisPage.loadRegion('south', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-footer', tmpContext));
-            }
-        );
+        ThisPage.initOnFirstLoad()
+       
     }
 
     //--- Implement this apge
