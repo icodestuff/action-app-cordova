@@ -1070,20 +1070,6 @@ var ActionAppCore = {};
      * @return void
      */
     me.compileTemplates = function(theOptionalAttrName, theOptionalTarget){
-       me.compileHandlebars(theOptionalAttrName, theOptionalTarget);
-    }
-
-    //me.htmlHandlebars = {};
-    me.tplHandlebars = {};
-    me.renderTemplate = function(theName, theContext){
-        try {
-            var tmpFn = (ThisApp.tplHandlebars[theName]);
-            return tmpFn(theContext);
-        } catch (theError) {
-            console.error("Error rendering template " + theError,"Name was " + theName);
-        }
-    }
-    me.compileHandlebars = function(theOptionalAttrName, theOptionalTarget){
         var tmpAttrName = theOptionalAttrName || "data-htpl";
         var tmpSelector = {};
         //--- Init what to look for, anything with this attribute
@@ -1094,13 +1080,26 @@ var ActionAppCore = {};
           var tmpKey = "" + tmpEl$.attr(tmpAttrName);
           //--- Add innerHTML to the templates object
           //me.htmlHandlebars[tmpKey] = "" + this.innerHTML;
-          me.tplHandlebars[tmpKey] = Handlebars.compile(this.innerHTML);          
+          me._templates[tmpKey] = Handlebars.compile(this.innerHTML);          
           //console.log("Added tmpKey",tmpKey);
           //--- clear so there is only one
           this.innerHTML = '';
         });
-        //--- Compile them all at once
-      }
+    }
+
+    //me.htmlHandlebars = {};
+    me._templates = {};
+    me.renderTemplate = function(theName, theContext){
+        try {
+            var tmpFn = (ThisApp._templates[theName]);
+            return tmpFn(theContext);
+        } catch (theError) {
+            console.error("Error rendering template " + theError,"Name was " + theName);
+        }
+    }
+    me.addTemplate = function(theName, theHTML){
+        me._templates[theName] = Handlebars.compile(theHTML); 
+    }
 
 
     //======================================
@@ -1279,6 +1278,10 @@ var ActionAppCore = {};
     function init(theAppConfig) {
 
         ThisCoreApp = this;
+        
+        //--- Init Required Plugins
+        me.useModuleComponents('plugin', ['ObjectManager']);
+        me.om = me.getComponent("plugin:ObjectManager");
 
         //--- ToDo: Support options in theAppConfig to control this        
         me.siteLayout = $('body').layout({
@@ -1394,11 +1397,13 @@ License: MIT
 
     //--- Base class for application pages
     function SitePage(theOptions) {
-
         this.options = theOptions || {};
         this.pageName = this.options.pageName || '';
         this.pageActionPrefix = this.options.pageActionPrefix || '';
+        console.log("SP this.pageActionPrefix",this.pageActionPrefix)
         this.pageTitle = this.options.pageTitle || '';
+        this.pageTemplates = this.options.pageTemplates || [];
+        
 
         this.linkDisplayOption = this.options.linkDisplayOption || "both"
         this._activatedFlag = false;
@@ -1425,18 +1430,36 @@ License: MIT
             }
 
         }
-
         this.appModule = this.options.appModule || false;
         if (this.appModule) {
             this.appModule[this.pageName] = this;
         }
-
     }
 
     var me = SitePage.prototype;
     var that = this;
 
-    
+    me.initTemplates = function(){
+        var dfd = jQuery.Deferred();
+        var tmpPages = [];
+        var tmpPrefix = this.pageActionPrefix;
+
+        //--- if no templates to process, no prob
+        if( !(this.pageTemplates && this.pageTemplates.length > 0)){
+            dfd.resolve(true);
+            return dfd.promise();
+        }
+        ThisApp.om.getObjects('[html]:app-tpl/' + this.pageName, this.pageTemplates).then(function (theDocs) {
+            for( var aKey in theDocs ){
+                var tmpTN = aKey.replace('.html','');
+                tmpTN = tmpPrefix + ':' + tmpTN;
+                ThisApp.addTemplate(tmpTN, theDocs[aKey]); 
+            }
+            dfd.resolve(true);
+        });
+        return dfd.promise();
+
+    }
     me.open = function (theOptions) {
         return ThisApp.gotoPage(this.pageName);p
     }

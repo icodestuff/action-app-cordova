@@ -12,9 +12,11 @@ License: MIT
         pageName:"WorkspacesPage", 
         pageTitle: "Workspaces", 
         pageActionPrefix: 'ws',
+        pageTemplates: ['page-body.html','page-footer.html'],
         linkDisplayOption:'both',
         appModule:AppModule
     };
+    
 
     thisSiteSpecs.layoutOptions = {
         facetPrefix: thisSiteSpecs.pageActionPrefix,
@@ -24,30 +26,24 @@ License: MIT
       
     }
 
-
-
     //--- Start with a ase SitePage component
     var ThisPage = new SiteMod.SitePage(thisSiteSpecs);
+    ThisPage.pageSpecs = thisSiteSpecs;
 
     ThisPage._onInit = function(theApp) {
         ThisPage._svg = theApp.getComponent("plugin:SvgControls");
-        ThisPage._om = theApp.getComponent("plugin:ObjectManager");
-
-         
+        ThisPage._om = theApp.om;
     }
 
     //--- Hook into the app lifecycle as needed
     ThisPage._onFirstActivate = function() {
-        ThisPage._om.getObjects('[html]:app-tpl/app-workspaces-page', ['page-body.html','page-footer.html']).then(function (theDocs) {
-            for( var aKey in theDocs ){
-                var tmpTN = aKey.replace('.html','');
-                tmpTN = thisSiteSpecs.pageActionPrefix + ':' + tmpTN;
-                ThisApp.tplHandlebars[tmpTN] = Handlebars.compile(theDocs[aKey]); 
-			}
-            var tmpContext = {}
-            ThisPage.loadRegion('center', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-body', tmpContext));
-            ThisPage.loadRegion('south', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-footer', tmpContext));
-        });
+        ThisPage.initTemplates().then(
+            function(){
+                var tmpContext = {}
+                ThisPage.loadRegion('center', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-body', tmpContext));
+                ThisPage.loadRegion('south', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-footer', tmpContext));
+            }
+        );
     }
 
     //--- Implement this apge

@@ -80,11 +80,12 @@
 
           var siteMod = ActionAppCore.module('site');
           ThisApp = new siteMod.CoreApp();
+
+          //THESE WILL GO AWAY
           ThisApp.compileTemplates();
-          //ThisApp.compileHandlebars();
+//          ThisApp.om = ThisApp.getComponent("plugin:ObjectManager");
           
           //--- Setup global access to OM
-          ThisApp.om = ThisApp.getComponent("plugin:ObjectManager");
   
           /* ****************************************
           //------------ This App Config
@@ -105,7 +106,7 @@
           */
           var appModule = ActionAppCore.module('app');
          
-          var tmpPluginComponents = ['ObjectManager','SvgControls']; //'DataTables' //'ObjectManager', 
+          var tmpPluginComponents = ['SvgControls']; //'DataTables' //'ObjectManager', 
           //'LayoutPage', 'PouchPage', 'DataTablesPage', 'WorkspacesPage', 'LogsPage'
           var tmpAppCompsToInit = ['DashboardPage', 'WorkspacesPage', 'LogsPage']; //, 'LogsPage'
           //var tmpAppCompsToInit = ['PuppetShow', 'LogsPage'];

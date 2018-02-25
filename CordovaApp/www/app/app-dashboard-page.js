@@ -68,9 +68,7 @@ License: MIT
 
     ThisPage._onInit = function(theApp) {
         ThisPage._svg = theApp.getComponent("plugin:SvgControls");
-        ThisPage._om = theApp.getComponent("plugin:ObjectManager");
-
-         
+        ThisPage._om = theApp.om;
     }
 
     ThisPage._onFirstActivate = function(theApp) {
