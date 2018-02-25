@@ -52,20 +52,33 @@ License: MIT
         });
     }
     ThisPage.runTest3 = function(){
-        ThisPage._om.getObject('[get]', './app-data/default.json').then(function (theDoc) {
-            console.log('got from get ',theDoc);
-            ThisApp.showMessage("Got doc - " + typeof(theDoc));
-            ThisApp.showMessage(" doc is - " + JSON.stringify(theDoc));
+        ThisPage._om.getObjects('[get]:app-data', ['default.json','demo.json']).then(function (theDocs) {
+            console.log('got from get ',theDocs);
+            ThisApp.showMessage("Got doc - " + typeof(theDocs));
+            ThisApp.showMessage(" doc is - " + JSON.stringify(theDocs));
         });
     }
     ThisPage.runTest4 = function(){
         console.log("runTest4");
-        ThisPage._om.getObject('[html]', './app-tpl/hello.html').then(function (theHTML) {
-            console.log('got from html ',theHTML);
-            ThisApp.showMessage("Got html - " + typeof(theHTML));
-            ThisApp.showMessage(" html is - " + theHTML);
-        });
-    }
+        var tmpList = ['./app-tpl/app-workspaces-page/footer.html','./app-tpl/app-workspaces-page/body.html'];
+        var tmpDefs = [];
+        var tmpTempls = [];
+        tmpDefs.push(
+            ThisPage._om.getObject('[html]','./app-tpl/app-workspaces-page/footer.html' ).then(function (theHTML) {
+                tmpTempls.footer = theHTML;
+            })
+        );
+        tmpDefs.push(
+            ThisPage._om.getObject('[html]','./app-tpl/app-workspaces-page/body.html' ).then(function (theHTML) {
+                tmpTempls.body = theHTML;
+            })
+        );
+        $.whenAll(tmpDefs).then(
+            function(){
+                console.log("Done",tmpTempls)
+            }
+        )
+}
 
     ThisPage._onInit = function(theApp) {
         ThisPage._svg = theApp.getComponent("plugin:SvgControls");

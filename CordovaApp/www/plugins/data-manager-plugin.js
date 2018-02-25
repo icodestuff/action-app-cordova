@@ -50,12 +50,16 @@ Source Handlers:  ("name" = function or name of other handler.)
 [any-internal] = when [] is used, these are internal / common handlers for known source data
 
   "[default]" = the default handler if none is provided, [pouch] by default.
+
+  DATABASE ACCESS
   "[pouch]" = Handler specifically for local pouch storage, where create and destroy requires no special privs
   "[couch]" = Handler for a (usually local) couch database
   "[ajax]" = Handler for any external ajax handler that follows the known protocol
 
-  TBD: 
-  "[cloudant]" = Handler for a cloudant *** not implemented, use couch
+  READ ONLY - AJAX BASED ACCESS
+  "[get]": Handler to get a JSON object via ajax get url
+  "[html]": Handler to get HTML via ajax get url
+
 
 */
 
@@ -361,6 +365,7 @@ $.fn.NoSqlDataManager = (function ($) {
  
     
      */
+
     me.putSourceHandler = putSourceHandler;
     function putSourceHandler(theSourceName, theHandler) {
         sourceHandlers[theSourceName] = theHandler;
@@ -416,13 +421,13 @@ $.fn.NoSqlDataManager = (function ($) {
 
     var sourceHandlers = {
         "[default]": "[pouch]",
-        "[pouch]": sourceHandlerForPouch,
-        "[couch]": sourceHandlerForNoSQL,
-        "[cloudant]": sourceHandlerForNoSQL,
-        "[get]": sourceHandlerForAjaxGet,
-        "[html]": sourceHandlerForAjaxGetHTML,
-        "[ajax]": sourceHandlerForAjaxPost
+        "[pouch]": sourceHandlerForPouch, //for client only data
+        "[couch]": sourceHandlerForNoSQL, //for NoSQL data
+        "[ajax]": sourceHandlerForAjaxPost, //for data
+        "[get]": sourceHandlerForAjaxGet, //Read Only - json data type
+        "[html]": sourceHandlerForHTML  //Read Only - html data type
     }
+
     var sourceHandlerOptions = {
         "[couch]": { auth: { username: '', password: '' } },
         "[ajax]": { ajax: { url: './' } }
@@ -597,39 +602,94 @@ $.fn.NoSqlDataManager = (function ($) {
     }
 
     //--- Simple URL get method for HTML files (templates usually)
-    me.sourceHandlerForAjaxGetHTML = sourceHandlerForAjaxGet;
-    function sourceHandlerForAjaxGetHTML(theAction, theOptions) {
+    me.sourceHandlerForHTML = sourceHandlerForAjaxGet;
+    function sourceHandlerForHTML(theAction, theOptions) {
         //--- Merge from theOptions if supporting more options
         return sourceHandlerForAjaxGet(theAction, {dataType:'html'});
     }
     
     //--- Simple URL get method, default type is json for returning objects
-    me.sourceHandlerForAjaxGet = sourceHandlerForAjaxGet;
+    //?  me.defaultSourceForAjaxGet = 'app-data';
+    me.sourceHandlerForAjaxGet = sourceHandlerForAjaxGet;    
     function sourceHandlerForAjaxGet(theAction, theOptions) {
         var dfd = jQuery.Deferred();
        
         var tmpAction = theAction.action || 'get';
-        var tmpURL = theAction.location || '';
+        var tmpKey = theAction.location || '';
+        var tmpKeys = [];
+        var tmpDefs = [];
+        var tmpTempls = [];
+
+        var tmpSource = theAction.source || '';
+        var tmpPre = './' + tmpSource + '/';
+
+        
         var tmpDataType = "json";
         if( theOptions && theOptions.dataType ){
             tmpDataType = theOptions.dataType;
         }
-        if (!(tmpURL)) {
-            dfd.reject("No url to get");
-            return dfd.promise();
-        }
 
-        $.ajax({
-            url: tmpURL,
-            method: 'GET',
-            dataType: tmpDataType,
-            success: function (theResponse) {
-                dfd.resolve(theResponse);
-            },
-            error: function (theError) {
-                dfd.reject("No URL setup to handle this ajax call: " + theError);
+        if(tmpAction == 'getDocs' && theAction.keys && theAction.keys.length ){
+            tmpKeys = theAction.keys;
+            var tmpDefs = [];
+            var tmpResults = {};
+            
+            for( var i = 0 ; i < tmpKeys.length ; i++){
+                var tmpListKey = tmpKeys[i];
+                //--- This is a trick that is needed to keep the keys from all being the last one when it really runs
+                //--   ... this contains the keys inside the function.
+                //--  Note: Just hit this doing the async, maybe better way?
+                var fnGetAndAdd = function(theKey){
+                    var tmpKey = theKey;
+                    return function(theResponse){
+                        theResponse["_key"] = tmpKey;
+                        tmpResults[tmpKey] = theResponse;
+                    }
+                }
+                var fnGetAndAddError = function(theKey){
+                    var tmpKey = theKey;
+                    return function(theError){
+                        tmpResults[tmpKey] = {"_error":theError,"_key":tmpKey};
+                    }
+                }
+                tmpDefs.push(
+                    $.ajax({
+                        url: tmpPre + tmpListKey,
+                        method: 'GET',
+                        dataType: tmpDataType,
+                        success: fnGetAndAdd(tmpListKey),
+                        error: fnGetAndAddError(tmpListKey)                    
+                    })   
+                                     
+                );
             }
-        });
+            $.whenAll(tmpDefs).then(
+                function(){
+                    dfd.resolve(tmpResults);
+                }
+            )
+            return dfd.promise();
+        } else {
+            //---only one
+            if (!(tmpKey)) {
+                dfd.reject("No key to get");
+                return dfd.promise();
+            }
+    
+            $.ajax({
+                url: tmpPre + tmpKey,
+                method: 'GET',
+                dataType: tmpDataType,
+                success: function (theResponse) {
+                    dfd.resolve(theResponse);
+                },
+                error: function (theError) {
+                    dfd.reject("No URL setup to handle this ajax call: " + theError);
+                }
+            });
+
+        }
+        
         return dfd.promise();
 
     }
@@ -637,21 +697,22 @@ $.fn.NoSqlDataManager = (function ($) {
     me.sourceHandlerForAjaxPost = sourceHandlerForAjaxPost;
     function sourceHandlerForAjaxPost(theAction, theOptions) {
         var dfd = jQuery.Deferred();
-        theAction.options = theOptions || {};
+        //theAction.options = theOptions || {};
+        var tmpOptions = theOptions || {};
 
-        if (typeof (theAction.options.ajax) != 'object') {
+        if (typeof (tmpOptions.ajax) != 'object') {
             dfd.reject("No ajax object setup to handle this ajax call");
             return dfd.promise();
         }
 
-        if (typeof (theAction.options.ajax.url) != 'string') {
+        if (typeof (tmpOptions.ajax.url) != 'string') {
             dfd.reject("No URL setup to handle this ajax call");
             return dfd.promise();
         }
 
         $.ajax({
-            url: theAction.options.ajax.url,
-            data: theAction.options.ajax.data || theAction.data || theAction,
+            url: tmpOptions.ajax.url,
+            data: tmpOptions.ajax.data || theAction.data || theAction,
             method: 'POST',
             dataType: "json",
             success: function (theResponse) {

@@ -1,0 +1,22 @@
+<div class="ui segment fluid">
+    <h3 class="application-outline-header">
+        <span facet="dash:ws:loadedWorkspace">default</span>
+    </h3>
+    <div class="application-toolbar">
+        <div class="item" style="margin-bottom:5px">
+            <div class="ui icon input fluid">
+                <input value="[couch]:testdb" field="dash:ws:db-name" type="text" placeholder="Database Name...">
+                <i class="database blue icon"></i>
+            </div>
+        </div>
+        <div class="item" style="margin-bottom:5px">
+            <div class="ui icon input fluid">
+                <input value="default" field="dash:ws:workspace" type="text" placeholder="Database Name...">
+                <i class="group object blue icon"></i>
+            </div>
+        </div>
+        <a appaction="dash:newWorkspace" class="ui button blue basic large">New</a>
+        <a appaction="dash:loadWorkspace" class="ui button blue basic large">Open</a>
+        <a appaction="dash:saveWorkspace" class="ui button blue basic large">Save</a>
+    </div>
+</div>

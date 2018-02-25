@@ -31,6 +31,7 @@ License: MIT
 
     //--- Hook into the app lifecycle as needed
     ThisPage._onFirstActivate = function() {
+        
         var tmpContext = {}
         ThisPage.loadRegion('center', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-body', tmpContext));
         ThisPage.loadRegion('south', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-footer', tmpContext));

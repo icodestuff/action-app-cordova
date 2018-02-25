@@ -40,12 +40,15 @@ Source Handlers:  ("name" = function or name of other handler.)
 [any-internal] = when [] is used, these are internal / common handlers for known source data
 
   "[default]" = the default handler if none is provided, [pouch] by default.
+
+  DATABASE ACCESS
   "[pouch]" = Handler specifically for local pouch storage, where create and destroy requires no special privs
   "[couch]" = Handler for a (usually local) couch database
-  "[ajax]" = Handler for any external ajax handler that follows the known protocol for gets/set routines
+  "[ajax]" = Handler for any external ajax handler that follows the known protocol
+
+  READ ONLY - AJAX BASED ACCESS
   "[get]": Handler to get a JSON object via ajax get url
   "[html]": Handler to get HTML via ajax get url
-
 
 */
 
@@ -74,9 +77,8 @@ Source Handlers:  ("name" = function or name of other handler.)
     me.putSourceHandler = dataMgr.putSourceHandler;
     //--- By default, getting an object is a one call / reply deal
     //--   By default the return object will have and ["_error"] property which may be ..
-     // a populated string, which is the error text
-     // a number over zero, the error number
-     // an object with .errorText, .errorNum, (TBD???)
+     // Format of return _error TBD
+     // ToDo: Design / Doc error formats
     me.getObject = getObject;
     function getObject(theSourceName, thePath){
         var dfd = jQuery.Deferred();
@@ -96,7 +98,7 @@ Source Handlers:  ("name" = function or name of other handler.)
     me.getObjects = getObjects;
     function getObjects(theSourceName, theKeys){
         var dfd = jQuery.Deferred();
-        dataMgr.getObjects(theSourceName, theKeys).then(
+        dataMgr.getDocuments(theSourceName, theKeys).then(
             function(theDocs) {
                 dfd.resolve(theDocs);
               },
