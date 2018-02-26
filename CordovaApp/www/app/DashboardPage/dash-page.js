@@ -66,14 +66,19 @@ License: MIT
         });
     }
     ThisPage.runTest3 = function(){
-        ThisPage._om.getObjects('[get]:app-data', ['default.json','demo.json']).then(function (theDocs) {
+        ThisPage._om.getObjects('[get]:app/app-data', ['default.json','demo.json']).then(function (theDocs) {
             console.log('got from get ',theDocs);
             ThisApp.showMessage("Got doc - " + typeof(theDocs));
             ThisApp.showMessage(" doc is - " + JSON.stringify(theDocs));
         });
     }
     ThisPage.runTest4 = function(){
-        alert('test 4')
+       //ThisPage.wsZoomControl.setState('sliderValue', 75);
+       console.log("ThisPage.wsHome",ThisPage.wsHome.getAsObject());
+       var tmpWSObj = false;
+       ThisPage._om.getObject('[get]:app/app-data','ws-home.json').then(function(theDoc){
+        ThisPage.wsHome.loadFromObject(theDoc)
+       })
     }
 
     ThisPage._onInit = function(theApp) {
@@ -98,25 +103,20 @@ License: MIT
                 var tmpZoomBarEl = me.getByAttr$({ facet: "dash:zoom-control" });
                 me.wsZoomControlWS = me._svg.getNewWorkpace();
                 me.wsZoomControlWS.init({ svg: tmpZoomBarEl[0], viewBox: {x: 0, y: 0, w: 200, h: 20} });
-                me.wsZoomControlWS.addControl('zoom-slider', 'horiz-slider', { sliderStart:0, sliderEnd: 400, sliderIncr: 10, sliderValue: 100, scale: .5 }).then(function(theControl){
+                me.wsZoomControlWS.addControl('zoom-slider', 'horiz-slider', { sliderStart:0, sliderEnd: 100, sliderIncr: 10, sliderValue: 50, scale: .5 }).then(function(theControl){
                     me.wsZoomControl = theControl;
                     me.wsZoomControl.subscribe("valueChanged", me.zoomValueChanged.bind(me));
                 });
 
-                var tmpWatsonIconEl = me.getByAttr$({ facet: "dash:watson-icon" });
-                me.wsWatsonIconWS = me._svg.getNewWorkpace();
-                me.wsWatsonIconWS.init({ svg: tmpWatsonIconEl[0], viewBox: {x: 0, y: 0, w: 50, h: 50} });
-                me.wsWatsonIconWS.addControl('icon-watson', 'icon-watson', {scale: .5 }).then(function(theControl){
-                    me.wsWatsonIcon = theControl;
-                    //me.wsWatsonIcon.subscribe("valueChanged", me.zoomValueChanged.bind(me));
-                });
+                var tmpHomeWsEl = me.getByAttr$({ facet: "dash:home-ws" });
+                me.wsHome = me._svg.getNewWorkpace();
+                me.wsHome.init({ svg: tmpHomeWsEl[0], viewBox: {x: 0, y: 0, w: 700, h: 700} });
 
-                var tmpDatabaseIconEl = me.getByAttr$({ facet: "dash:database-icon" });
-                me.wsDatabaseIconWS = me._svg.getNewWorkpace();
-                me.wsDatabaseIconWS.init({ svg: tmpDatabaseIconEl[0], viewBox: {x: 0, y: 0, w: 150, h: 150} });
-                me.wsDatabaseIconWS.addControl('icon-database', 'icon-database', {scale: 1 }).then(function(theControl){
+                me.wsHome.addControl('icon-database', 'icon-database', {scale: 1 }).then(function(theControl){
                     me.wsDatabaseIcon = theControl;
-                    //me.wsDatabaseIcon.subscribe("valueChanged", me.zoomValueChanged.bind(me));
+                });
+                me.wsHome.addControl('icon-database2', 'icon-database', {scale: 1, translateY:120 }).then(function(theControl){
+                    me.wsDatabaseIcon2 = theControl;
                 });
 
             }

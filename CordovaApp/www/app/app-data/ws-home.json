@@ -1,0 +1,72 @@
+{
+    "zoomAt": 50,
+    "zoomIncr": 10,
+    "objects": [
+      {
+        "oid": "horiz-slider:0",
+        "cid": "horiz-slider",
+        "translateX": 1008.3876647949219,
+        "translateY": 50.32618713378906,
+        "scale": 1,
+        "states": {
+          "sliderValue": 27
+        }
+      },
+      {
+        "oid": "icon-cloud:0",
+        "cid": "icon-cloud",
+        "translateX": 581.5470275878906,
+        "translateY": 96.92449951171875,
+        "scale": 1.4000000000000004,
+        "states": {}
+      },
+      {
+        "oid": "icon-database:0",
+        "cid": "icon-database",
+        "translateX": 151.55994415283203,
+        "translateY": 466.73865509033203,
+        "scale": 3.120000000000002,
+        "states": {
+          "iconType": "client"
+        }
+      },
+      {
+        "oid": "horiz-slider:1",
+        "cid": "horiz-slider",
+        "translateX": 96.49217224121094,
+        "translateY": 394.9305019378662,
+        "scale": 3.160000000000002,
+        "states": {
+          "sliderValue": 39
+        }
+      },
+      {
+        "oid": "icon-cloud:1",
+        "cid": "icon-cloud",
+        "translateX": 311.27677154541016,
+        "translateY": 42.870460510253906,
+        "scale": 1,
+        "states": {}
+      },
+      {
+        "oid": "horiz-slider:2",
+        "cid": "horiz-slider",
+        "translateX": 1015.8433990478516,
+        "translateY": 164.02608966827393,
+        "scale": 1,
+        "states": {
+          "sliderValue": 58
+        }
+      },
+      {
+        "oid": "horiz-slider:3",
+        "cid": "horiz-slider",
+        "translateX": 1012.1154861450195,
+        "translateY": 108.10810852050781,
+        "scale": 1,
+        "states": {
+          "sliderValue": 59
+        }
+      }
+    ]
+  }

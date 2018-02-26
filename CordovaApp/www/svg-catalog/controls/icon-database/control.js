@@ -1,4 +1,3 @@
-//--- SvgControl Base Object - Functionality for all SvgControls
 (function (ActionAppCore, $) {
     var ExtendMod = ActionAppCore.module("SvgControls:extension");
     var SvgMod = ActionAppCore.module("SvgControls:catalog");
@@ -127,22 +126,6 @@
             }
         });
 
-        /*
-        $(tmpEl).closest('div')
-       
-            .popup({
-                on: 'click',
-                closable:true,
-                onHide: function(){
-                    setTimeout(function(){
-                       // console.log('destory',tmpEl);
-                        $(tmpEl).closest('div').popup('destroy')  
-                    },10);
-                },
-                html: '<div class="ui vertical menu">  <a class="item">    <h4 class="ui header">Promotions</h4>    <p>Check out our new promotions</p>  </a>  <a class="item">    <h4 class="ui header">Coupons</h4>    <p>Check out our collection of coupons</p>  </a>  <a class="item"><h4 class="ui header">Rebates</h4>    <p>Visit our rebate forum for information on claiming rebates</p></a></div>'
-            }).popup('show');
-       
-            */
 
     }
 
@@ -180,13 +163,6 @@
 
     //--- Add This control to the SVG module as available
     SvgMod[thisControlName] = ThisControl;
-    //SvgMod[thisControlClass] = ThisControl;
-
-    /*
-    SvgControlsManager.registerControl(thisControlName, function () {
-        return new SvgMod[thisControlClass];
-    })
-    */
 
 
 })(ActionAppCore, $);

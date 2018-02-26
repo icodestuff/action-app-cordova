@@ -54,6 +54,7 @@
         return this.sliderValue;
     }
     
+    //-- ToDo: Review this, change to expose states and state specs?
     me.actionSpecs = {
         "setSliderValue": { name: "setSliderValue", params: { "theValue": { name: "theValue" } } }
     };
@@ -72,7 +73,6 @@
         }
         return true;
     }
-    
     me.onClick = function (e) {
        // console.log("click", e);
        var tmpRelativeWidth = 300;
@@ -114,6 +114,8 @@
         var dfd = jQuery.Deferred();
         var tmpOptions = theOptions || {};
 
+
+
         tmpOptions.controlName = thisControlName;
         tmpOptions.controlTitle = thisControlTitle;
         tmpOptions.onClick = this.onClick.bind(this);
@@ -134,9 +136,11 @@
         var tmpPromise = this.initControl(theParentSVG, tmpOptions).then(
             function (theControl) {
                 tmpThisControl.frame = theControl.svgNode.select("#frame");
-
                 tmpThisControl.knob = theControl.svgNode.select("#knob");
                 tmpThisControl.sliderBack = theControl.svgNode.select("#slider-back");
+                for( var aSN in tmpOptions ){
+                    tmpThisControl.setState(aSN, tmpOptions[aSN])
+                }
                 dfd.resolve(tmpThisControl);
             }
         );

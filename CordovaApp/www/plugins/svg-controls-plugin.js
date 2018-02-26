@@ -202,6 +202,13 @@ SVG controls Plugin:
         this.states[theState] = theValue;
         return true;
     }
+    me.getState = getState;
+    function getState(theState) {
+        if (!theState) {
+            return undefined;
+        }
+        return this.states[theState]
+    }    
 
     me.getTransform = getTransform;
     function getTransform() {
@@ -248,7 +255,7 @@ SVG controls Plugin:
     me.initControl = initControl;
     function initControl(theParentSVG, theOptions) {
         this.initPubSub();
-        //console.log("init control options", theOptions)
+        console.log("init control options", theOptions)
         var dfd = jQuery.Deferred();
         this.colorOffset = 0;
         var tmpThisControl = this;
@@ -533,8 +540,8 @@ SVG controls Plugin:
       * 
       * To Use: <any ws>.addControl('', 'some-control-name', {some:options});
       *
-      * @param  {String} theObjectID   [A unique id for this workspace]
-      *    Note: Use blank to have auto-generated unique id for this workspace
+      * @param  {String} theObjectID   [A unique id for this conrol]
+      *    Note: Use blank to have auto-generated unique id for this conrol
       * @param  {String} theControlName   [The name/id of the control from the control catalog]
       * @param  {Object} theOptions   [standard options object with control options such as scale, transformX, etc]
       * @return void

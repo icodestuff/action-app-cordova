@@ -9,7 +9,7 @@
         tmpHasLaunched = true;
         (app.onDeviceReady.bind(app))();
       }
-    },2000)
+    },500)
     //---- ACTUAL CODE ==    
     ActionAppCore = ActionAppCore || window.ActionAppCore;
   
