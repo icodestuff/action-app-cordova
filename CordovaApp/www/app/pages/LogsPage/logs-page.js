@@ -19,7 +19,7 @@ License: MIT
     };
 
     thisPageSpecs.pageTemplates = {
-        baseURL: 'app/LogsPage/tpl',
+        baseURL: 'app/pages/LogsPage/tpl',
         //-- Page to lookup : name to call it when pulling
         //---  Good to "namespace" your templates with the page prefix to avoid name conflicts
         templateMap:{

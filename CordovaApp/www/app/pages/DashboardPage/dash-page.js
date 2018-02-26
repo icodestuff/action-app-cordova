@@ -17,7 +17,7 @@ License: MIT
     };
 
     thisPageSpecs.pageTemplates = {
-        baseURL: 'app/DashboardPage/tpl',
+        baseURL: 'app/pages/DashboardPage/tpl',
         //-- Page to lookup : name to call it when pulling
         //---  Good to "namespace" your templates with the page prefix to avoid name conflicts
         templateMap:{

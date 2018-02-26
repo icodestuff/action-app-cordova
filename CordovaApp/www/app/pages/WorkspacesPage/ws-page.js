@@ -18,7 +18,7 @@ License: MIT
     };
     
     thisPageSpecs.pageTemplates = {
-        baseURL: 'app/WorkspacesPage/tpl',
+        baseURL: 'app/pages/WorkspacesPage/tpl',
         //-- Page to lookup : name to call it when pulling
         //---  Good to "namespace" your templates with the page prefix to avoid name conflicts
         templateMap:{
