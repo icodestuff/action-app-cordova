@@ -46,8 +46,8 @@ License: MIT
         var tmpObj = {"running":"a test", "more":12, "arr":["one","two"], "child": {"name":"Jane"}};
         ThisPage._om.putObject('dash-test-db', 'testdoc2', tmpObj).then(function (theDoc) {
             console.log('saved ',theDoc);
-            ThisApp.showMessage("Saved doc - " + typeof(theDoc));
-            ThisApp.showMessage(" doc is - " + JSON.stringify(theDoc));
+            ThisApp.appMessage("Saved doc - " + typeof(theDoc));
+            ThisApp.appMessage(" doc is - " + JSON.stringify(theDoc));
         });
     }
     ThisPage.runTest2 = function(){
@@ -58,23 +58,23 @@ License: MIT
                 if(typeof(tmpMsg) == 'object'){
                     tmpMsg = tmpMsg.message || tmpMsg.errorText || 'unknown error';
                 }
-                ThisApp.showMessage(tmpMsg, "e")
+                ThisApp.appMessage(tmpMsg, "e")
             } else {
-                //ThisApp.showMessage("Got doc - " + typeof(theDoc));
-                ThisApp.showMessage("Got document - JSON is - " + JSON.stringify(theDoc));
+                //ThisApp.appMessage("Got doc - " + typeof(theDoc));
+                ThisApp.appMessage("Got document - JSON is - " + JSON.stringify(theDoc));
             }
         });
     }
     ThisPage.runTest3 = function(){
         ThisPage._om.getObjects('[get]:app/app-data', ['default.json','demo.json']).then(function (theDocs) {
             console.log('got from get ',theDocs);
-            ThisApp.showMessage("Got document, see logs","i", {show:true});
-            ThisApp.showMessage(" doc is - " + JSON.stringify(theDocs));
+            ThisApp.appMessage("Got document, see logs","i", {show:true});
+            ThisApp.appMessage(" doc is - " + JSON.stringify(theDocs));
         });
     }
     ThisPage.runTest4 = function(){
        //ThisPage.wsZoomControl.setState('sliderValue', 75);
-       ThisApp.showMessage("ThisPage.wsHome is " + JSON.stringify(ThisPage.wsHome.getAsObject()), "i", {show:false});
+       ThisApp.appMessage("ThisPage.wsHome is " + JSON.stringify(ThisPage.wsHome.getAsObject()), "i", {show:false});
        var tmpWSObj = false;
        ThisPage._om.getObject('[get]:app/app-data','ws-home.json').then(function(theDoc){
         ThisPage.wsHome.loadFromObject(theDoc)

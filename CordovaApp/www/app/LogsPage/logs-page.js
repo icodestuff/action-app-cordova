@@ -215,11 +215,11 @@ License: MIT
     }
     ThisPage.sendTestMessages = sendTestMessages;
     function sendTestMessages() {
-        ThisApp.showMessage("Just some info");
-        ThisApp.showMessage("Successful message here.", true, {title:"It was updated", data:{ what: "nothing" }});
-        ThisApp.showMessage("Warning, Warning, Warning!", "w", {title:"This is just a warning", data:{ reason: "It is important" }});
-        ThisApp.showMessage("There was an error, in case you want to take action, see the data.", "e", {data:{ reason: "It is important" }});
-        ThisApp.showMessage("Just some info to log in messages, but now show in the UI","i",{noshow:true});
+        ThisApp.appMessage("Just some info");
+        ThisApp.appMessage("Successful message here.", true, {title:"It was updated", data:{ what: "nothing" }});
+        ThisApp.appMessage("Warning, Warning, Warning!", "w", {title:"This is just a warning", data:{ reason: "It is important" }});
+        ThisApp.appMessage("There was an error, in case you want to take action, see the data.", "e", {data:{ reason: "It is important" }});
+        ThisApp.appMessage("Just some info to log in messages, but now show in the UI","i",{noshow:true});
         refreshMessageCenter();
     }
 

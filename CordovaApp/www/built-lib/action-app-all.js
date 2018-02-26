@@ -250,15 +250,15 @@ var ActionAppCore = {};
         }
 
         /**
-         * showMessage
+         * appMessage
         *  - Shows a message and saves in messages array, optionall with related saved data
         * 
         * Example: 
 
-        * ThisApp.showMessage("Just some info");
-        * ThisApp.showMessage("Successful message here.", true, "It was updated", { what: "nothing" });
-        * ThisApp.showMessage("Warning, Warning, Warning!", "w", "This is just a warning", { reason: "testing" });
-        * ThisApp.showMessage("There was an error, in case you want to take action.", false, false, { reason: "testing" });
+        * ThisApp.appMessage("Just some info");
+        * ThisApp.appMessage("Successful message here.", true, "It was updated", { what: "nothing" });
+        * ThisApp.appMessage("Warning, Warning, Warning!", "w", "This is just a warning", { reason: "testing" });
+        * ThisApp.appMessage("There was an error, in case you want to take action.", false, false, { reason: "testing" });
 
         * 
         * @param  {String} theMsg   [The name of the facet to load]
@@ -272,7 +272,7 @@ var ActionAppCore = {};
         * @return void
         * 
         */
-        me.showMessage = function (theMsg, theOptionalType, theOptionalTitle, theOptionalData) {
+        me.appMessage = function (theMsg, theOptionalType, theOptionalTitle, theOptionalData) {
             var tmpType = "info";
             if (typeof (theOptionalType) == 'string') {
                 theOptionalType = theOptionalType.toLowerCase();
