@@ -9,18 +9,18 @@ License: MIT
     var SiteMod = ActionAppCore.module("site");
     var AppModule = ActionAppCore.module("app");
 
-    var thisSiteSpecs = {
+    var thisPageSpecs = {
         pageName:"LogsPage", 
         pageTitle: "Logs", 
-        pageActionPrefix: 'logs',
+        pageNamespace: 'logs',
         linkDisplayOption:'both',
         //pageTemplate:'app-pages-logs',
         appModule:AppModule
     };
 
     
-    thisSiteSpecs.layoutOptions = {
-        facetPrefix: thisSiteSpecs.pageActionPrefix,
+    thisPageSpecs.layoutOptions = {
+        facetPrefix: thisPageSpecs.pageNamespace,
         north: true,
         west:false,
         east: false
@@ -28,7 +28,7 @@ License: MIT
     }
 
     //--- Start with a ase SitePage component
-    var ThisPage = new SiteMod.SitePage(thisSiteSpecs);
+    var ThisPage = new SiteMod.SitePage(thisPageSpecs);
 
     ThisPage.templates = {};
 
@@ -58,9 +58,9 @@ License: MIT
     ThisPage._onFirstActivate = function(){
         console.log("Log Page: _onFirstActivate");
         var tmpContext = {}
-        ThisPage.loadRegion('north', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-header', tmpContext));
-        ThisPage.loadRegion('south', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-footer', tmpContext));
-        ThisPage.loadRegion('center', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-body', tmpContext));
+        ThisPage.loadRegion('north', ThisApp.renderTemplate(thisPageSpecs.pageNamespace + ':page-header', tmpContext));
+        ThisPage.loadRegion('south', ThisApp.renderTemplate(thisPageSpecs.pageNamespace + ':page-footer', tmpContext));
+        ThisPage.loadRegion('center', ThisApp.renderTemplate(thisPageSpecs.pageNamespace + ':page-body', tmpContext));
     }
     
     ThisPage._onActivate = function(){

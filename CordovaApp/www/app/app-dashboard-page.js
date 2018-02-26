@@ -8,23 +8,23 @@ License: MIT
     var SiteMod = ActionAppCore.module("site");
     var AppModule = ActionAppCore.module("app");
 
-    var thisSiteSpecs = {
+    var thisPageSpecs = {
         pageName:"DashboardPage", 
         pageTitle: "Dashboard", 
-        pageActionPrefix: 'dash',
+        pageNamespace: 'dash',
         linkDisplayOption:'both',
         appModule:AppModule
     };
 
-    thisSiteSpecs.layoutOptions = {
-        facetPrefix: thisSiteSpecs.pageActionPrefix,
+    thisPageSpecs.layoutOptions = {
+        facetPrefix: thisPageSpecs.pageNamespace,
         north: false,
         west: false,
         east: false
     }
 
     //--- Start with a ase SitePage component
-    var ThisPage = new SiteMod.SitePage(thisSiteSpecs);
+    var ThisPage = new SiteMod.SitePage(thisPageSpecs);
 
     //--- Hook into the app lifecycle as needed    
     
@@ -78,8 +78,8 @@ License: MIT
 
 
         var tmpContext = {}
-        ThisPage.loadRegion('center', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-body', tmpContext));
-        ThisPage.loadRegion('south', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-footer', tmpContext));
+        ThisPage.loadRegion('center', ThisApp.renderTemplate(thisPageSpecs.pageNamespace + ':page-body', tmpContext));
+        ThisPage.loadRegion('south', ThisApp.renderTemplate(thisPageSpecs.pageNamespace + ':page-footer', tmpContext));
 
         //--- Add any custom init stuff
         $('[appuse="dash:home-sidebar"] .ui.sidebar')

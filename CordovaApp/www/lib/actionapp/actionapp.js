@@ -1399,7 +1399,7 @@ License: MIT
     function SitePage(theOptions) {
         this.options = theOptions || {};
         this.pageName = this.options.pageName || '';
-        this.pageActionPrefix = this.options.pageActionPrefix || '';
+        this.pageNamespace = this.options.pageNamespace || '';
 
         this.pageTitle = this.options.pageTitle || '';
         this.pageTemplates = this.options.pageTemplates || [];
@@ -1449,21 +1449,29 @@ License: MIT
         );
     }
     me.initLayoutTemplates = function(){
-        if(!this.layoutTemplates){
+        //thisPageSpecs.layoutOptions
+        if(!this.layoutOptions && this.layoutOptions.templates){
             return;
         }
-        var tmpLOs = this.layoutTemplates;
+        var tmpLTs = this.layoutOptions.templates;
         var tmpContext = {}
-        for( var aName in tmpLOs ){
-            var tmpLO = tmpLOs[aName];
-            this.loadRegion(aName, ThisApp.renderTemplate(this.pageActionPrefix + ':' + tmpLO.tpl, tmpContext));
+        for( var aName in tmpLTs ){
+            var tmpLT = tmpLTs[aName];
+            var tmpLTName = '';
+            if( typeof(tmpLT) == 'string'){
+                tmpLTName = tmpLT;
+            } else {
+                //--- object only other option
+                tmpLTName = tmpLT.name;
+            }
+            //this.pageNamespace + ':' + 
+            this.loadRegion(aName, ThisApp.renderTemplate(tmpLTName, tmpContext));
         }
     }
 
     me.initTemplates = function(){
         var dfd = jQuery.Deferred();
         var tmpPages = [];
-        var tmpPrefix = this.pageActionPrefix;
 
         //--- if no templates to process, no prob, return now
         if( !(this.pageTemplates && this.pageTemplates.templateMap)){
@@ -1471,22 +1479,19 @@ License: MIT
             return dfd.promise();
         }
 
-        var tmpTpls = [];
-        var tmpTplsIndex = {};
+        var tmpTpls = [];        
         for( var aName in this.pageTemplates.templateMap){
-            var tmpTplFN = this.pageTemplates.templateMap[aName];
-            //--- String now, support oject with default if needed later
-            tmpTpls.push(tmpTplFN);
-            tmpTplsIndex[tmpTplFN] = aName;
+            tmpTpls.push(aName);
         }
         var tmpBaseURL = this.pageTemplates.baseURL || 'app-tpl/';
 
+        //--- This is needed because this changes inside the promise due to 
+        //    not .bind(this) in the function, the temp reference is quicker, same result
+        var tmpThis = this;
         ThisApp.om.getObjects('[html]:' + tmpBaseURL, tmpTpls).then(function (theDocs) {
             for( var aKey in theDocs ){
-                var tmpTplName = tmpTplsIndex[aKey];
+                var tmpTplName = tmpThis.pageTemplates.templateMap[aKey];
                 if( tmpTplName ){
-                    tmpTplName = tmpPrefix + ':' + tmpTplName
-                   // console.log("Adding tpl " + tmpTplName);
                     ThisApp.addTemplate(tmpTplName, theDocs[aKey]); 
                 }
             }
@@ -1532,8 +1537,8 @@ License: MIT
             this._onPreInit(this.app)
         }
 
-        if (this.app && this.pageActionPrefix && this.pageActionPrefix != '') {
-            this.app.registerActionDelegate(this.pageActionPrefix, runAction.bind(this));
+        if (this.app && this.pageNamespace && this.pageNamespace != '') {
+            this.app.registerActionDelegate(this.pageNamespace, runAction.bind(this));
         }
 
         //--- Add dynamic link on init from plugin module
@@ -1602,7 +1607,7 @@ License: MIT
     me.runAction = runAction;
     function runAction(theAction, theSourceObject) {
         var tmpAction = theAction || '';
-        tmpAction = tmpAction.replace((this.pageActionPrefix + ":"), '');
+        tmpAction = tmpAction.replace((this.pageNamespace + ":"), '');
         if (typeof (this[tmpAction]) == 'function') {
             this[tmpAction](tmpAction, theSourceObject);
         } else if (typeof (me[tmpAction]) == 'function') {

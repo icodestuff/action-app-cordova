@@ -7,44 +7,41 @@ License: MIT
 
     var SiteMod = ActionAppCore.module("site");
     var AppModule = ActionAppCore.module("app");
-//                ThisPage.loadRegion('center', ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':page-body', tmpContext));
+//                ThisPage.loadRegion('center', ThisApp.renderTemplate(thisPageSpecs.pageNamespace + ':page-body', tmpContext));
 
-    var thisSiteSpecs = {
+    var thisPageSpecs = {
         pageName:"WorkspacesPage", 
         pageTitle: "Workspaces", 
-        pageActionPrefix: 'ws',
-        layoutTemplates: {
-            "center":{
-                tpl:'page-body'
-            },
-            "south":{
-                tpl:'page-footer'
-            }
-        },
-        pageTemplates: {
-            baseURL: 'app-tpl/WorkspacesPage/',
-            templateMap:{
-                "page-body":"page-body.html",
-                "page-footer":"page-footer.html"
-            }
-        },
-//        pageTemplates: ['page-body.html','page-footer.html'],
+        pageNamespace: 'ws',
         linkDisplayOption:'both',
         appModule:AppModule
     };
     
+    thisPageSpecs.pageTemplates = {
+        baseURL: 'app-tpl/WorkspacesPage/',
+        //-- Page to lookup : name to call it when pulling
+        //---  Good to "namespace" your templates with the page prefix to avoid name conflicts
+        templateMap:{
+            "page-body.html": thisPageSpecs.pageNamespace + ":page-body",
+            "page-footer.html": thisPageSpecs.pageNamespace + ":page-footer"
+        }
+    }
+    
 
-    thisSiteSpecs.layoutOptions = {
-        facetPrefix: thisSiteSpecs.pageActionPrefix,
+    thisPageSpecs.layoutOptions = {
+        templates: {
+            "center": thisPageSpecs.pageNamespace + ":" + "page-body",
+            "south": thisPageSpecs.pageNamespace + ":" + "page-footer"
+        },  
+        facetPrefix: thisPageSpecs.pageNamespace,
         north: false,
         west: false,
-        east: false
-      
+        east: false      
     }
 
     //--- Start with a ase SitePage component
-    var ThisPage = new SiteMod.SitePage(thisSiteSpecs);
-    ThisPage.pageSpecs = thisSiteSpecs;
+    var ThisPage = new SiteMod.SitePage(thisPageSpecs);
+    ThisPage.pageSpecs = thisPageSpecs;
 
     ThisPage._onInit = function(theApp) {
         ThisPage._svg = theApp.getComponent("plugin:SvgControls");
@@ -52,11 +49,11 @@ License: MIT
     }
 
     // ThisPage.initLayoutTemplates = function(){
-    //     var tmpLOs = thisSiteSpecs.layoutTemplates;
+    //     var tmpLOs = thisPageSpecs.layoutTemplates;
     //     var tmpContext = {}
     //     for( var aName in tmpLOs ){
     //         var tmpLO = tmpLOs[aName];
-    //         ThisPage.loadRegion(aName, ThisApp.renderTemplate(thisSiteSpecs.pageActionPrefix + ':' + tmpLO.tpl, tmpContext));
+    //         ThisPage.loadRegion(aName, ThisApp.renderTemplate(thisPageSpecs.pageNamespace + ':' + tmpLO.tpl, tmpContext));
     //     }
     // }
     //--- Hook into the app lifecycle as needed
