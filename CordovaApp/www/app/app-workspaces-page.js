@@ -50,7 +50,7 @@ License: MIT
 
     //--- Hook into the app lifecycle as needed
     ThisPage._onFirstActivate = function() {
-        ThisPage.initOnFirstLoad()
+        ThisPage.initOnFirstLoad();
     }
 
     //--- Implement this apge

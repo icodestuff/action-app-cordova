@@ -1440,13 +1440,17 @@ License: MIT
     //var that = this;
 
     me.initOnFirstLoad = function(){
+        var dfd = jQuery.Deferred();
         var tmpThis = this;
         this.initTemplates().then(
             function(){
                 //--- if needed, if not it just exists
+                //--- No async calls, just run it
                 tmpThis.initLayoutTemplates();
+                dfd.resolve(true);
             }
         );
+        return dfd.promise();
     }
     me.initLayoutTemplates = function(){
         //thisPageSpecs.layoutOptions
