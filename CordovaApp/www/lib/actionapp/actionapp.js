@@ -267,13 +267,19 @@ var ActionAppCore = {};
         *  "warning" or "w"
         *  "error" or "e" or false
         *  "success" or "s" or true
-        * @param  {String} theOptionalTitle   [The title, no title if excluded]
-        * @param  {String} theOptionalData   [The optional data to be stored with the message log]
+        * @param  {String} theOptions
+        *    .title =   [The optional title, no title if excluded]
+        *    .data =   [The optional data to be stored with the message log]
+        *    .noshow =   [do not show, just log it]
         * @return void
         * 
         */
-        me.showMessage = function (theMsg, theOptionalType, theOptionalTitle, theOptionalData) {
+        me.showMessage = function (theMsg, theOptionalType, theOptions) {
             var tmpType = "info";
+            var tmpOptions = theOptions || {};
+            var tmpOptionalData = tmpOptions.data || false;
+            
+
             if (typeof (theOptionalType) == 'string') {
                 theOptionalType = theOptionalType.toLowerCase();
                 if (theOptionalType == "warning" || theOptionalType == "error" || theOptionalType == "success") {
@@ -293,25 +299,23 @@ var ActionAppCore = {};
                 }
             }
             var tmpMsgPos = (me.messagesAt++);
-            var tmpData = false;
-            if (theOptionalData) {
-                tmpData = theOptionalData
-            }
             var tmpMsgObj = {
                 text: theMsg,
                 type: tmpType,
-                title: theOptionalTitle || '',
+                title: tmpOptions.title || '',
                 pos: tmpMsgPos,
-                data: theOptionalData
+                data: tmpOptionalData
             }
 
             me.messages.push(tmpMsgObj)
-
-            if (typeof (theOptionalTitle) == 'string') {
-                toastr[tmpType](theMsg, theOptionalTitle);
-            } else {
-                toastr[tmpType](theMsg);
+            if( tmpOptions.noshow !== true){
+                if (typeof (tmpOptions.title) == 'string') {
+                    toastr[tmpType](theMsg, tmpOptions.title);
+                } else {
+                    toastr[tmpType](theMsg);
+                }
             }
+            
             me.publish("message:sent", tmpMsgObj);
         }
 

@@ -74,7 +74,7 @@ License: MIT
     }
     ThisPage.runTest4 = function(){
        //ThisPage.wsZoomControl.setState('sliderValue', 75);
-       console.log("ThisPage.wsHome",ThisPage.wsHome.getAsObject());
+       ThisApp.showMessage("ThisPage.wsHome is " + JSON.stringify(ThisPage.wsHome.getAsObject()), "i", {noshow:true});
        var tmpWSObj = false;
        ThisPage._om.getObject('[get]:app/app-data','ws-home.json').then(function(theDoc){
         ThisPage.wsHome.loadFromObject(theDoc)

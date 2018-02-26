@@ -216,9 +216,10 @@ License: MIT
     ThisPage.sendTestMessages = sendTestMessages;
     function sendTestMessages() {
         ThisApp.showMessage("Just some info");
-        ThisApp.showMessage("Successful message here.", true, "It was updated", { what: "nothing" });
-        ThisApp.showMessage("Warning, Warning, Warning!", "w", "This is just a warning", { reason: "testing" });
-        ThisApp.showMessage("There was an error, in case you want to take action.", false, false, { reason: "testing" });
+        ThisApp.showMessage("Successful message here.", true, {title:"It was updated", data:{ what: "nothing" }});
+        ThisApp.showMessage("Warning, Warning, Warning!", "w", {title:"This is just a warning", data:{ reason: "It is important" }});
+        ThisApp.showMessage("There was an error, in case you want to take action, see the data.", "e", {data:{ reason: "It is important" }});
+        ThisApp.showMessage("Just some info to log in messages, but now show in the UI","i",{noshow:true});
         refreshMessageCenter();
     }
 
