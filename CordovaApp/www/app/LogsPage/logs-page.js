@@ -18,13 +18,28 @@ License: MIT
         appModule:AppModule
     };
 
-    
+    thisPageSpecs.pageTemplates = {
+        baseURL: 'app/LogsPage/tpl',
+        //-- Page to lookup : name to call it when pulling
+        //---  Good to "namespace" your templates with the page prefix to avoid name conflicts
+        templateMap:{
+            "page-header.html": thisPageSpecs.pageNamespace + ":page-header",
+            "page-body.html": thisPageSpecs.pageNamespace + ":page-body",
+            "page-footer.html": thisPageSpecs.pageNamespace + ":page-footer",
+            "msg-ctr-item.html": thisPageSpecs.pageNamespace + ":msg-ctr-item"
+        }
+    }
+
     thisPageSpecs.layoutOptions = {
+        templates: {
+            "north": thisPageSpecs.pageNamespace + ":" + "page-header",
+            "center": thisPageSpecs.pageNamespace + ":" + "page-body",
+            "south": thisPageSpecs.pageNamespace + ":" + "page-footer"
+        },  
         facetPrefix: thisPageSpecs.pageNamespace,
         north: true,
         west:false,
         east: false
-      
     }
 
     //--- Start with a ase SitePage component
@@ -40,8 +55,8 @@ License: MIT
     * This happens when the page is loaded, try to push activity back to when the tab is used
     *    If your component need to do stuff to be availale in the background, do it here
     */
-    ThisPage._onPreInit = function(){
-        ThisPage.om = ThisPage.om || ThisApp.getComponent("plugin:ObjectManager");
+    ThisPage._onPreInit = function(theApp){
+        ThisPage.om = theApp.om;
         console.log("Log Page: _onPreInit ",ThisPage.om);
     }
     ThisPage._onInit = function() {
@@ -57,10 +72,11 @@ License: MIT
     */
     ThisPage._onFirstActivate = function(){
         console.log("Log Page: _onFirstActivate");
-        var tmpContext = {}
-        ThisPage.loadRegion('north', ThisApp.renderTemplate(thisPageSpecs.pageNamespace + ':page-header', tmpContext));
-        ThisPage.loadRegion('south', ThisApp.renderTemplate(thisPageSpecs.pageNamespace + ':page-footer', tmpContext));
-        ThisPage.loadRegion('center', ThisApp.renderTemplate(thisPageSpecs.pageNamespace + ':page-body', tmpContext));
+        ThisPage.initOnFirstLoad().then(
+            function(){
+                var me = ThisPage;
+            }
+        );        
     }
     
     ThisPage._onActivate = function(){
