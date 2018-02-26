@@ -340,7 +340,6 @@ var ActionAppCore = {};
 
     $.extend(me, ExtendMod.SetDisplay);
 
-    //--- INCOMPLETE ? UNTESTED
     me.initTemplates = function(theTemplateSpecs){
         var dfd = jQuery.Deferred();
         
@@ -355,7 +354,7 @@ var ActionAppCore = {};
         for( var aName in theTemplateSpecs.templateMap){
             tmpTpls.push(aName);
         }
-        var tmpBaseURL = theTemplateSpecs.baseURL || 'app-tpl/';
+        var tmpBaseURL = theTemplateSpecs.baseURL || 'app/app-tpl/';
 
         //--- This is needed because this changes inside the promise due to 
         //    not .bind(this) in the function, the temp reference is quicker, same result
@@ -1468,9 +1467,8 @@ License: MIT
     me.initOnFirstLoad = function(){
         var dfd = jQuery.Deferred();
         var tmpThis = this;
-        this.initTemplates().then(
+        ThisApp.initTemplates(this.pageTemplates).then(
             function(){
-                //--- if needed, if not it just exists
                 //--- No async calls, just run it
                 tmpThis.initLayoutTemplates();
                 dfd.resolve(true);
@@ -1479,7 +1477,6 @@ License: MIT
         return dfd.promise();
     }
     me.initLayoutTemplates = function(){
-        //thisPageSpecs.layoutOptions
         if(!this.layoutOptions && this.layoutOptions.templates){
             return;
         }
@@ -1491,45 +1488,12 @@ License: MIT
             if( typeof(tmpLT) == 'string'){
                 tmpLTName = tmpLT;
             } else {
-                //--- object only other option
                 tmpLTName = tmpLT.name;
             }
-            //this.pageNamespace + ':' + 
             this.loadRegion(aName, ThisApp.renderTemplate(tmpLTName, tmpContext));
         }
     }
-
-    me.initTemplates = function(){
-        var dfd = jQuery.Deferred();
-        var tmpPages = [];
-
-        //--- if no templates to process, no prob, return now
-        if( !(this.pageTemplates && this.pageTemplates.templateMap)){
-            dfd.resolve(true);
-            return dfd.promise();
-        }
-
-        var tmpTpls = [];        
-        for( var aName in this.pageTemplates.templateMap){
-            tmpTpls.push(aName);
-        }
-        var tmpBaseURL = this.pageTemplates.baseURL || 'app-tpl/';
-
-        //--- This is needed because this changes inside the promise due to 
-        //    not .bind(this) in the function, the temp reference is quicker, same result
-        var tmpThis = this;
-        ThisApp.om.getObjects('[html]:' + tmpBaseURL, tmpTpls).then(function (theDocs) {
-            for( var aKey in theDocs ){
-                var tmpTplName = tmpThis.pageTemplates.templateMap[aKey];
-                if( tmpTplName ){
-                    ThisApp.addTemplate(tmpTplName, theDocs[aKey]); 
-                }
-            }
-            dfd.resolve(true);
-        });
-        return dfd.promise();
-
-    }
+   
     me.open = function (theOptions) {
         return ThisApp.gotoPage(this.pageName);p
     }

@@ -67,7 +67,7 @@
             ThisApp = new siteMod.CoreApp();
   
             var tmpTplSpecs = {
-              baseURL: 'app-tpl',
+              baseURL: 'app/app-tpl',
               templateMap:{
                   "about-this-app.html": "app:about-this-app",
                   "page-loading-spinner.html": "app:page-loading-spinner"
