@@ -127,7 +127,8 @@
             ThisApp.aboutThisApp = function(){
               ThisApp.showCommonDialog({ header: "About this application", content: {data:'', template:'app:about-this-app'} });
             }
-   
+            //--- Turn off messages by default
+            ThisApp.setMessagesOptions({show:false})
     
         } catch(ex){
              console.error("Unexpected Error " + ex);

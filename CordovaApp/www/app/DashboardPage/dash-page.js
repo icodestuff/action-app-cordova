@@ -68,13 +68,13 @@ License: MIT
     ThisPage.runTest3 = function(){
         ThisPage._om.getObjects('[get]:app/app-data', ['default.json','demo.json']).then(function (theDocs) {
             console.log('got from get ',theDocs);
-            ThisApp.showMessage("Got doc - " + typeof(theDocs));
+            ThisApp.showMessage("Got document, see logs","i", {show:true});
             ThisApp.showMessage(" doc is - " + JSON.stringify(theDocs));
         });
     }
     ThisPage.runTest4 = function(){
        //ThisPage.wsZoomControl.setState('sliderValue', 75);
-       ThisApp.showMessage("ThisPage.wsHome is " + JSON.stringify(ThisPage.wsHome.getAsObject()), "i", {noshow:true});
+       ThisApp.showMessage("ThisPage.wsHome is " + JSON.stringify(ThisPage.wsHome.getAsObject()), "i", {show:false});
        var tmpWSObj = false;
        ThisPage._om.getObject('[get]:app/app-data','ws-home.json').then(function(theDoc){
         ThisPage.wsHome.loadFromObject(theDoc)

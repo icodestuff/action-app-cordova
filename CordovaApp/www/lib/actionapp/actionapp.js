@@ -238,6 +238,16 @@ var ActionAppCore = {};
             return true;
         }
 
+        me._messageOptions = {
+            show:true
+        }
+        me.setMessagesOption = function(theOption, theValue){            
+            console.log("setMessagesOption",theOption, theValue)
+            ThisApp._messageOptions[theOption] = theValue
+        }
+        me.setMessagesOptions = function(theOptions){            
+            $.extend(ThisApp._messageOptions,theOptions);
+        }
         me.getMessages = function () {
             return me.messages;
         }
@@ -259,7 +269,7 @@ var ActionAppCore = {};
         * ThisApp.showMessage("Successful message here.", true, "It was updated", { what: "nothing" });
         * ThisApp.showMessage("Warning, Warning, Warning!", "w", "This is just a warning", { reason: "testing" });
         * ThisApp.showMessage("There was an error, in case you want to take action.", false, false, { reason: "testing" });
-
+        *    Also see: ThisApp.setMessagesOption(theOption,theValue)
         * 
         * @param  {String} theMsg   [The name of the facet to load]
         * @param  {String} theOptionalType   [info, warning, error, success] Default: info
@@ -270,7 +280,7 @@ var ActionAppCore = {};
         * @param  {String} theOptions
         *    .title =   [The optional title, no title if excluded]
         *    .data =   [The optional data to be stored with the message log]
-        *    .noshow =   [do not show, just log it]
+        *    .show =   [show as toastr or just log it] (can set option for default and override here)
         * @return void
         * 
         */
@@ -294,8 +304,6 @@ var ActionAppCore = {};
             } else if (typeof (theOptionalType) == 'boolean') {
                 if (theOptionalType == true) {
                     tmpType = "success";
-                } else if (theOptionalType == false) {
-                    tmpType = "error";
                 }
             }
             var tmpMsgPos = (me.messagesAt++);
@@ -308,7 +316,12 @@ var ActionAppCore = {};
             }
 
             me.messages.push(tmpMsgObj)
-            if( tmpOptions.noshow !== true){
+            var tmpIsShow = me._messageOptions.show;
+            console.log("tmpIsShow",tmpIsShow)
+            if(typeof(tmpOptions.show) == 'boolean'){
+                tmpIsShow = tmpOptions.show;
+            }
+            if( tmpIsShow ){
                 if (typeof (tmpOptions.title) == 'string') {
                     toastr[tmpType](theMsg, tmpOptions.title);
                 } else {
