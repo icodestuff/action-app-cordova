@@ -27,12 +27,6 @@ Data Manager uses known or identified sources
 
   //--- Special functions
 
-  //--- Replicate from a remote server
-  // Notes:
-  //  This uses a bulk load to initially populate a pouch database, then replication is used if supported
-  //  Replication only works to refresh a localPouch database from a remote source that supports replication, else
-  //    a full refresh is done each time
-  dataMgr.syncLocalVersion(theLocalDatabaseName, theRemoteSourceName);
 
 Data Manager can be extended to handle custom sources
   dataMgr.putSourceHandler('mytestdb',{"handler":"[couch]", "options":{"dbName","some-database-name"}}); 
@@ -68,44 +62,10 @@ $.fn.NoSqlDataManager = (function ($) {
     function DataManager(theOptions) { };
     var me = DataManager.prototype;
 
-    function getFailFunction(theDeferred, thePrefixText) {
-        return function (theError) {
-            console.error((thePrefixText || 'Error') + ": " + theError);
-            theDeferred.reject((thePrefixText || 'Error') + ": " + theError);
-        }
-    }
-    me.createAndPopulateDB = function (theDBName, theRows) {
-        var dfd = jQuery.Deferred();
-
-        var tmpRows = theRows || [];
-        var tmpCount = tmpRows.length;
-        //--- assume it has been removed, no db should exist
-        //Todo: Check for count, over 0 fail?
-        var db = new PouchDB(theDBName);
-        try {
-            var tmpBulk = [];
-            var tmpAdded = 0;
-            for (var i = 0; i < tmpCount; i++) {
-                var tmpDoc = tmpRows[i].doc || false;
-                if (tmpDoc) {
-                    tmpBulk.push(tmpRows[i].doc);
-                    tmpAdded++;
-                }
-            }
-            db.bulkDocs(tmpBulk, { "new_edits": false }).then(function () {
-                dfd.resolve(tmpAdded);
-            }, function (theError) {
-                dfd.reject("Error in createAndPopulateDB: " + theError);
-            })
-        } catch (theError) {
-            dfd.reject("Error in createAndPopulateDB: " + theError);
-        }
-        return dfd.promise();
-    }
+   
 
     me.getDataDetails = getDataDetails;
     function getDataDetails(theData) {
-      //  console.log("theData", theData);
 
         var tmpRet = {
             fieldCount: 0,
@@ -199,93 +159,6 @@ $.fn.NoSqlDataManager = (function ($) {
 
         return tmpRet;
     }
-
-    me.syncLocalVersion = syncLocalVersion;
-    function syncLocalVersion(theLocalDatabaseName, theRemoteSourceName) {
-        var dfd = jQuery.Deferred();
-        try {
-            if (!(theLocalDatabaseName)) {
-                dfd.reject("No source name");
-                return dfd.promise();
-            }
-            var tmpLocalVersion = new PouchDB(theLocalDatabaseName);
-            tmpLocalVersion.info().then(function (theInfo) {
-                if (theInfo && theInfo.doc_count > 0) {
-                    me.replicateDownLocalVersion(theLocalDatabaseName, theRemoteSourceName).then(
-                        function (theResponse) {
-                            dfd.resolve(theResponse);
-                        }
-                    )
-                    //alert("would repl")
-                } else {
-                    me.pullInitialLocalVersion(theLocalDatabaseName, theRemoteSourceName).then(
-                        function (theResponse) {
-                            dfd.resolve(theResponse);
-                        }
-                    )
-                }
-            });
-        } catch (theError) {
-            dfd.reject("Error getting database: " + theError);
-        }
-        return dfd.promise();
-    };
-
-
-
-    me.pullInitialLocalVersion = pullInitialLocalVersion;
-    function pullInitialLocalVersion(theLocalDatabaseName, theRemoteSourceName) {
-
-        var dfd = jQuery.Deferred();
-        try {
-            if (!(theLocalDatabaseName)) {
-                dfd.reject("No source name");
-                return dfd.promise();
-            }
-            var tmpLocalVersion = new PouchDB(theLocalDatabaseName);
-            me.getDatabaseFromSourceName(theRemoteSourceName).then(function (theRemoteDB) {
-                theRemoteDB.allDocs({ include_docs: true }).then(function (docs) {
-
-                    var tmpRows = docs.rows;
-                    me.createAndPopulateDB(theLocalDatabaseName, tmpRows).then(function () {
-                        dfd.resolve(true);
-                    }).fail(
-                        function (theError) {
-                            dfd.reject("Error loading all docs: " + theError);
-                        }
-                        );
-                }, function (theError) {
-                    dfd.reject("Error loading all docs: " + theError);
-                })
-
-            }).fail(function (theError) { dfd.reject("Error syncing local version: " + theError) })
-        } catch (theError) {
-            dfd.reject("Error getting database: " + theError);
-        }
-        return dfd.promise();
-    };
-
-    me.replicateDownLocalVersion = replicateDownLocalVersion;
-    function replicateDownLocalVersion(theLocalDatabaseName, theRemoteSourceName) {
-        var dfd = jQuery.Deferred();
-        try {
-            if (!(theLocalDatabaseName)) {
-                dfd.reject("No source name");
-                return dfd.promise();
-            }
-            var tmpLocalVersion = new PouchDB(theLocalDatabaseName);
-            me.getDatabaseFromSourceName(theRemoteSourceName).then(function (theRemoteDB) {
-                tmpLocalVersion.replicate.from(theRemoteDB).on('complete', function () {
-                    dfd.resolve(true);
-                }).on('error', function (err) {
-                    dfd.reject("Error syncing local version: " + err);
-                });
-            }).fail(function (theError) { dfd.reject("Error syncing local version: " + theError) })
-        } catch (theError) {
-            dfd.reject("Error getting database: " + theError);
-        }
-        return dfd.promise();
-    };
 
     me.getDocumentHandler = getDocumentHandler;
     function getDocumentHandler(theSourceName) {
@@ -471,9 +344,6 @@ $.fn.NoSqlDataManager = (function ($) {
                 tmpDoc._index = aDocPos;
                 tmpRet.docs.push(tmpDoc);
             }
-            // if (tmpDoc.hasOwnProperty('sys_DocType') && tmpDoc['sys_DocType'] == 'session') {
-           
-            // }
         }
         return tmpRet;
     }
@@ -761,12 +631,8 @@ $.fn.NoSqlDataManager = (function ($) {
 
     me.init = init;
     function init() {
-        if (ThisApp) {
-            ThisApp.registerActionDelegate("_om", runAction);
-        }
         return me;
     }
-
 
     return me;
 
