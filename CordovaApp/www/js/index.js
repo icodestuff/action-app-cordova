@@ -3,69 +3,56 @@
   ThisApp = null;
   var tmpHasLaunched = false;
 
-  // // if( !(navigator && navigator.app && navigator.app.overrideButton) ){
-  // //   //This is a normal webpage
-    
-  // // }
+  //-- ToDo: Client detection ***  
   window.setTimeout( function(){
     if( !tmpHasLaunched) {
       tmpHasLaunched = true;
-      //setup();
       (app.onDeviceReady.bind(app))();
     }
-  },1000)
+  },2000)
   //---- ACTUAL CODE ==    
   ActionAppCore = ActionAppCore || window.ActionAppCore;
 
-   var app = {
-      // Application Constructor
-      initialize: function() {
-
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-        
-
-      },
-      onBackButton: function(){
-        //alert('onBackButton');
-        if( ThisApp.sidebarGetDisplay() ){
-          ThisApp.hideSidebar();
-        }
-        return false;
-      },
-      onVolUpButton: function(){
-        alert('onVolUpButton');
-        return false;
-      },
-      onVolDownButton: function(){
-        alert('onVolDownButton');
-        return false;
-      },
-      onMenuButton: function(){
-        ThisApp.showSidebar();
-        return false;
-      },
-// deviceready Event Handler
-      //
-      // Bind any cordova events here. Common events are:
-      // 'pause', 'resume', etc.
-      onDeviceReady: function() {
-          tmpHasLaunched = true;
-          setup();
-          this.receivedEvent('deviceready');
-          
-          document.addEventListener('backbutton', this.onBackButton.bind(this), false);
-          document.addEventListener('volumedownbutton', this.onVolDownButton.bind(this), false);
-          document.addEventListener('volumeupbutton', this.onVolUpButton.bind(this), false);            
-          if( typeof(navigator) != 'undefined' && typeof(navigator.app) != 'undefined' && typeof(navigator.app.overrideButton) === 'function'){
-            navigator.app.overrideButton("menubutton", true);  // <-- Add this line
-          }
-          //
-          document.addEventListener("menubutton", this.onMenuButton, false);
-        },
-      // Update DOM on a Received Event
-      receivedEvent: function(id) {
-
+  var app = {
+    initialize: function() {
+      document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+    },
+    onBackButton: function(){
+      //alert('onBackButton');
+      if( ThisApp.sidebarGetDisplay() ){
+        ThisApp.hideSidebar();
       }
+      return false;
+    },
+    onVolUpButton: function(){
+      alert('onVolUpButton');
+      return false;
+    },
+    onVolDownButton: function(){
+      alert('onVolDownButton');
+      return false;
+    },
+    onMenuButton: function(){
+      ThisApp.showSidebar();
+      return false;
+    },
+    onDeviceReady: function() {
+      tmpHasLaunched = true;
+      setup();
+      this.receivedEvent('deviceready');
+      
+      document.addEventListener('backbutton', this.onBackButton.bind(this), false);
+      document.addEventListener('volumedownbutton', this.onVolDownButton.bind(this), false);
+      document.addEventListener('volumeupbutton', this.onVolUpButton.bind(this), false);            
+      if( typeof(navigator) != 'undefined' && typeof(navigator.app) != 'undefined' && typeof(navigator.app.overrideButton) === 'function'){
+        navigator.app.overrideButton("menubutton", true);  // <-- Add this line
+      }
+      //
+      document.addEventListener("menubutton", this.onMenuButton, false);
+    },
+    receivedEvent: function(id) {
+
+    }
   };
   
   app.initialize();
@@ -73,19 +60,21 @@
   var btnTest,
   testOutput;
 
-
   var tmpAt = 0;
   function setup(){
       try {
-
           var siteMod = ActionAppCore.module('site');
           ThisApp = new siteMod.CoreApp();
 
-          //THESE WILL GO AWAY
-          ThisApp.compileTemplates();
-          
-          //--- Setup global access to OM
-  
+          var tmpTplSpecs = {
+            baseURL: 'app-tpl',
+            templateMap:{
+                "about-this-app.html": "app:about-this-app",
+                "tpl-standard-loading-icon.html": "app:tpl-standard-loading-icon"
+            }
+          };
+
+
           /* ****************************************
           //------------ This App Config
           //-- "display" Option:  The Links on the top hide when in mobile, the display options control where the links show
@@ -93,24 +82,12 @@
           //     both = show on top and sidebar, then add to sidebar for small screens only
           //     primary = show on top but not in sidebar, then add to sidebar for small screens only
           //     [blank] = blank or missing value will make it show on the left only
-          
-          //--- can start with a configuration like this or none to use defaults
-          //    Defaults: appuse="main-page-container" is the attribute to assign to the container to load into / control
-  
-          ThisApp.config = {
-            "rem-title": "Add a title property to include a site title",
-            "container": '#main-page-body'
-          }
-          
           */
           var appModule = ActionAppCore.module('app');
          
-          var tmpPluginComponents = ['SvgControls']; //'DataTables' //'ObjectManager', 
-          //'LayoutPage', 'PouchPage', 'DataTablesPage', 'WorkspacesPage', 'LogsPage'
-          var tmpAppCompsToInit = ['DashboardPage', 'WorkspacesPage', 'LogsPage']; //, 'LogsPage'
-          //var tmpAppCompsToInit = ['PuppetShow', 'LogsPage'];
+          var tmpPluginComponents = ['SvgControls'];
+          var tmpAppCompsToInit = ['DashboardPage', 'WorkspacesPage', 'LogsPage'];
           var tmpAppComponents = [ ];
-
 
           ThisApp.useModuleComponents('plugin', tmpPluginComponents)
   
@@ -145,6 +122,8 @@
 
           ThisApp.init();
 
+          ThisApp.initTemplates(tmpTplSpecs);
+
           ThisApp.aboutThisApp = function(){
             ThisApp.showCommonDialog({ header: "About this application", content: {data:'', template:'app:about-this-app'} });
           }
@@ -160,6 +139,5 @@
       alert('runTest');
   }
 
-  //--- End Bubble 
   })();
 

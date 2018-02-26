@@ -340,6 +340,40 @@ var ActionAppCore = {};
 
     $.extend(me, ExtendMod.SetDisplay);
 
+    //--- INCOMPLETE ? UNTESTED
+    me.initTemplates = function(theTemplateSpecs){
+        var dfd = jQuery.Deferred();
+        
+
+        //--- if no templates to process, no prob, return now
+        if( !(theTemplateSpecs && theTemplateSpecs.templateMap)){
+            dfd.resolve(true);
+            return dfd.promise();
+        }
+
+        var tmpTpls = [];        
+        for( var aName in theTemplateSpecs.templateMap){
+            tmpTpls.push(aName);
+        }
+        var tmpBaseURL = theTemplateSpecs.baseURL || 'app-tpl/';
+
+        //--- This is needed because this changes inside the promise due to 
+        //    not .bind(this) in the function, the temp reference is quicker, same result
+        var tmpThis = this;
+        ThisApp.om.getObjects('[html]:' + tmpBaseURL, tmpTpls).then(function (theDocs) {
+            for( var aKey in theDocs ){
+                var tmpTplName = theTemplateSpecs.templateMap[aKey];
+                if( tmpTplName ){
+                    console.log("tmpTplName",tmpTplName)
+                    ThisApp.addTemplate(tmpTplName, theDocs[aKey]); 
+                }
+            }
+            dfd.resolve(true);
+        });
+        return dfd.promise();
+
+    }
+
     me.components = {};
 
     /**
@@ -1194,7 +1228,8 @@ var ActionAppCore = {};
 
     function initGlobalDialog() {
         var tmpNewDiv = $('<div facet="site:global-dialog" class="hidden"></div>').appendTo('body');
-        me.loadFacet(commonDialogFacet, me.renderTemplate('tpl-common-global-dialog') )
+        var tmpHTML = '<div appuse="global-dialog" class="ui modal"> <i class="close icon"></i> <div facet="site:dialog-header" class="header"></div> <div facet="site:dialog-content" class="content"> </div> <div facet="site:dialog-actions" class="actions"></div> </div> ';
+        me.loadFacet(commonDialogFacet, tmpHTML )
     }
 
     function initAppActions() {
@@ -1316,19 +1351,10 @@ var ActionAppCore = {};
         }
 
         //--- Standard functionality  ===================================
-        var tmpNavHTML = '';
-        // var tmpNavHTML = me.getTemplatedContent('tpl-side-menu-item',me.config.navlinks);
-        // console.log("tmpNavHTML",tmpNavHTML);
-        // console.log("tmpNavHTML2",ThisApp.renderTemplate('tpl-side-menu-item',me.config));
+        var tmpNavHTML = '{{#each navlinks}} <a appuse="tablinks" group="app:pages" item="{{name}}" appaction="showPage" class="item">{{title}}</a> {{/each}}';
+        ThisApp.addTemplate('tpl-side-menu-item',tmpNavHTML)
         $('[appuse="side-menu"]').html(ThisApp.renderTemplate('tpl-side-menu-item',me.config));
-        // tmpNavHTML = me.getTemplatedContent('tpl-nav-menu-item',me.config.navlinks);
-        // console.log("tmpNavHTML",tmpNavHTML);
-        // console.log("tmpNavHTML2",ThisApp.renderTemplate('tpl-side-menu-item',me.config));
         $('[appuse="nav-menu"]').html(ThisApp.renderTemplate('tpl-side-menu-item',me.config));
-        
-        // var tmpHeaderHTML = me.getTemplatedContent('tpl-top-menu',me.config.navlinks);
-        // $('[appuse="top-menu"]').html(tmpHeaderHTML);
-        // $('[appuse="top-menu"]').html(ThisApp.renderTemplate('tpl-top-menu',me.config));
 
         initMenus();
         initAppActions();

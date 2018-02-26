@@ -20,32 +20,16 @@
 <html>
 
 <head>
-    <!--
-        Customize this policy to fit your own app's needs. For more guidance, see:
-            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-        Some notes:
-            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
+  <meta http-equiv="Content-Security-Policy" content="default-src 'unsafe-eval' *; font-src 'unsafe-eval' data: 'self'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 
-**** OPEN ****
-                <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+  <link rel="stylesheet" type="text/css" href="css/index.css">
 
-            -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'unsafe-eval' *; font-src 'unsafe-eval' data: 'self'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-
-    <link rel="stylesheet" type="text/css" href="css/index.css">
-
-    <link rel="stylesheet" href="lib/semantic/dist/semantic.min.css">
-  <!-- <link rel="stylesheet" href="lib/jstree/dist/themes/default/style.min.css" /> -->
+  <link rel="stylesheet" href="lib/semantic/dist/semantic.min.css">
   <link rel="stylesheet" href="lib/rangeslider/dist/rangeslider.css" />
   <link rel="stylesheet" href="lib/toastr/toastr.min.css">
-  <!-- <link rel="stylesheet" href="lib/datatables/datatables.min.css">
-  <link rel="stylesheet" href="lib/datatables/responsive.custom.css"> -->
 
   <link rel="stylesheet" type="text/css" href="lib/jqueryui/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="lib/layout/layout-default-latest.css">
@@ -54,8 +38,6 @@
   <!-- app level css overrides last -->
   <link rel="stylesheet" href="css/appframe.css">
 
-
-  
 
   <style type="text/css">
     .site-layout-north {
@@ -94,65 +76,7 @@
 
   
 
-  <!-- <div app-use="app-loader"> <i class="huge icons"> <i class="big loading spinner icon"></i> </i> </div> -->
-
-<!--   Inline Templates === === === === === === === === === === === === === === ===  -->  
-<div style="display:none" appuse="templates">
-  
-  <!-- === === === ===  THIS APP TEMPLATES === === === === -->  
-
-
-  <script data-htpl="app:about-this-app" type="text/x-htpl">
-    <div class="">
-        This is an application based on the ActionApp design and converted for Cordova Use.
-        <hr />
-        See the readme file and code for details.
-    </div>
-</script>
-
-
-  <!-- === === === ===  APP FRAME TEMPLATES CONVERTED === === === === -->    
-  <script data-htpl="tpl-standard-loading-icon" type="text/x-htpl">
-    <div>
-      <i class="huge icons">
-        <i class="big loading spinner icon"></i>
-      </i>
-    </div>
-</script>
-
-<!-- Example of using triple HTML passthrough with a function -->
-<!-- <script data-htpl="tpl-border-layout" type="text/x-htpl">
-  {{{getLayoutHTML}}}
-</script> -->
-
-<script data-htpl="tpl-common-global-dialog" type="text/x-htpl">
-    <div appuse="global-dialog" class="ui modal">
-        <i class="close icon"></i>
-        <div facet="site:dialog-header" class="header"></div>
-        <div facet="site:dialog-content" class="content"> </div>
-        <div facet="site:dialog-actions" class="actions"></div>
-      </div>        
-</script>
-
-<script data-htpl="tpl-side-menu-item" type="text/x-htpl">
-  {{#each navlinks}}
-    <a appuse="tablinks" group="app:pages" item="{{name}}" appaction="showPage" class="item">{{title}}</a>
-  {{/each}}
-</script>
-<script data-htpl="tpl-nav-menu-item" type="text/x-htpl">
-  {{#each navlinks}}
-    <a appuse="tablinks" group="app:pages" item="{{name}}" appaction="showPage" class="item">{{title}}</a>
-  {{/each}}
-</script>
-<script data-htpl="tpl-top-menu-item" type="text/x-htpl">
-  {{if (display == "primary" || display == "both")}}<a appuse="tablinks" group="app:pages" item="{{:name}}" appaction="showPage" class="mobilehidden item">{{:title}}</a>{{/if}}
-</script>
-<script data-htpl="tpl-top-menu-button" type="text/x-htpl">
-  <a appaction="{{:appaction}}" class="ui button">{{:title}}</a>
-</script>
-
-
-
+ 
 </div>
 
 
