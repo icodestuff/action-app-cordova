@@ -1646,14 +1646,16 @@ License: MIT
     }
 
     function onActivateThisPage() {
-        //-refresh local message details everytime we change to this view
+        //-- Runs _onFirstActivate one time, 
+        //    ... then calls _onActivate sucessive times
+        //  _onActivate NOT CALLED the first time, 
+        //   ... call manually if needed from _onFirstActivate
         if (!this._activatedFlag) {
             this._activatedFlag = true;
             if(typeof(this._onFirstActivate) == 'function'){
                 this._onFirstActivate();
             }
-        }
-        if(typeof(this._onActivate) == 'function'){
+        } else if(typeof(this._onActivate) == 'function'){
             this._onActivate();
         }
     }

@@ -74,13 +74,14 @@ License: MIT
         console.log("Log Page: _onFirstActivate");
         ThisPage.initOnFirstLoad().then(
             function(){
-                var me = ThisPage;
+                ThisPage._onActivate();
             }
         );        
     }
     
     ThisPage._onActivate = function(){
         console.log("Log Page: _onActivate");
+        ThisPage.refreshMessageCenter();
     }
     //--- End lifecycle hooks
     
