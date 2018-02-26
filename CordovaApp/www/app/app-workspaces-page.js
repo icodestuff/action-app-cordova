@@ -48,22 +48,18 @@ License: MIT
         ThisPage._om = theApp.om;
     }
 
-    // ThisPage.initLayoutTemplates = function(){
-    //     var tmpLOs = thisPageSpecs.layoutTemplates;
-    //     var tmpContext = {}
-    //     for( var aName in tmpLOs ){
-    //         var tmpLO = tmpLOs[aName];
-    //         ThisPage.loadRegion(aName, ThisApp.renderTemplate(thisPageSpecs.pageNamespace + ':' + tmpLO.tpl, tmpContext));
-    //     }
-    // }
     //--- Hook into the app lifecycle as needed
     ThisPage._onFirstActivate = function() {
         ThisPage.initOnFirstLoad()
     }
 
     //--- Implement this apge
-    ThisPage.workspaceTest = function () {
-        var tmpMarkup = '<hr/>Added to Out';
+    ThisPage.doSomething = function () {
+        var tmpMarkup = '<hr/>We did something';
+        var tmpVal = $('[field="ws:demo-field"]').val();
+        if( tmpVal ){
+            tmpMarkup += ' with ' + tmpVal
+        }
         ThisApp.addToFacet('ws:workspaces-out', tmpMarkup);
     }
     

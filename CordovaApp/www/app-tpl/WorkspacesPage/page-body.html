@@ -5,18 +5,14 @@
     <div class="application-toolbar">
         <div class="item" style="margin-bottom:5px">
             <div class="ui icon input fluid">
-                <input value="[couch]:testdb" field="dash:ws:db-name" type="text" placeholder="Database Name...">
-                <i class="database blue icon"></i>
+                <input value="Test Value" field="ws:demo-field" type="text" placeholder="Demo Field...">
+                <i class="pencil blue icon"></i>
             </div>
         </div>
-        <div class="item" style="margin-bottom:5px">
-            <div class="ui icon input fluid">
-                <input value="default" field="dash:ws:workspace" type="text" placeholder="Database Name...">
-                <i class="group object blue icon"></i>
-            </div>
-        </div>
-        <a appaction="dash:newWorkspace" class="ui button blue basic large">New</a>
-        <a appaction="dash:loadWorkspace" class="ui button blue basic large">Open</a>
-        <a appaction="dash:saveWorkspace" class="ui button blue basic large">Save</a>
+        <a appaction="ws:doSomething" class="ui button blue basic large">Do Something</a>
+    </div>
+    <hr />
+    <div facet="ws:workspaces-out" class="ui segment basic">
+        Stuff outputs here
     </div>
 </div>
