@@ -70,7 +70,7 @@
             baseURL: 'app-tpl',
             templateMap:{
                 "about-this-app.html": "app:about-this-app",
-                "tpl-standard-loading-icon.html": "app:tpl-standard-loading-icon"
+                "page-loading-spinner.html": "app:page-loading-spinner"
             }
           };
 
