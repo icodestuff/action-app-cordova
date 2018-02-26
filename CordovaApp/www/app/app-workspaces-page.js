@@ -21,7 +21,14 @@ License: MIT
                 tpl:'page-footer'
             }
         },
-        pageTemplates: ['page-body.html','page-footer.html'],
+        pageTemplates: {
+            baseURL: 'app-tpl/WorkspacesPage/',
+            templateMap:{
+                "page-body":"page-body.html",
+                "page-footer":"page-footer.html"
+            }
+        },
+//        pageTemplates: ['page-body.html','page-footer.html'],
         linkDisplayOption:'both',
         appModule:AppModule
     };
@@ -55,7 +62,6 @@ License: MIT
     //--- Hook into the app lifecycle as needed
     ThisPage._onFirstActivate = function() {
         ThisPage.initOnFirstLoad()
-       
     }
 
     //--- Implement this apge

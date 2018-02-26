@@ -1465,16 +1465,30 @@ License: MIT
         var tmpPages = [];
         var tmpPrefix = this.pageActionPrefix;
 
-        //--- if no templates to process, no prob
-        if( !(this.pageTemplates && this.pageTemplates.length > 0)){
+        //--- if no templates to process, no prob, return now
+        if( !(this.pageTemplates && this.pageTemplates.templateMap)){
             dfd.resolve(true);
             return dfd.promise();
         }
-        ThisApp.om.getObjects('[html]:app-tpl/' + this.pageName, this.pageTemplates).then(function (theDocs) {
+
+        var tmpTpls = [];
+        var tmpTplsIndex = {};
+        for( var aName in this.pageTemplates.templateMap){
+            var tmpTplFN = this.pageTemplates.templateMap[aName];
+            //--- String now, support oject with default if needed later
+            tmpTpls.push(tmpTplFN);
+            tmpTplsIndex[tmpTplFN] = aName;
+        }
+        var tmpBaseURL = this.pageTemplates.baseURL || 'app-tpl/';
+
+        ThisApp.om.getObjects('[html]:' + tmpBaseURL, tmpTpls).then(function (theDocs) {
             for( var aKey in theDocs ){
-                var tmpTN = aKey.replace('.html','');
-                tmpTN = tmpPrefix + ':' + tmpTN;
-                ThisApp.addTemplate(tmpTN, theDocs[aKey]); 
+                var tmpTplName = tmpTplsIndex[aKey];
+                if( tmpTplName ){
+                    tmpTplName = tmpPrefix + ':' + tmpTplName
+                   // console.log("Adding tpl " + tmpTplName);
+                    ThisApp.addTemplate(tmpTplName, theDocs[aKey]); 
+                }
             }
             dfd.resolve(true);
         });
