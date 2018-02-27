@@ -13,7 +13,11 @@ License: MIT
         pageName:"WorkspacesPage", 
         pageTitle: "Workspaces", 
         pageNamespace: 'ws',
-        linkDisplayOption:'both',
+        navOptions:{
+            topLink:true,
+            sideLink:true
+        },
+        //linkDisplayOption:'sidebar',
         appModule:AppModule
     };
     

@@ -12,7 +12,11 @@ License: MIT
         pageName:"DashboardPage", 
         pageTitle: "Dashboard", 
         pageNamespace: 'dash',
-        linkDisplayOption:'both',
+        navOptions:{
+            topLink:true,
+            sideLink:true
+        },
+        //linkDisplayOption:'both',
         appModule:AppModule
     };
 

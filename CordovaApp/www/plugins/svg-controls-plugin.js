@@ -255,7 +255,6 @@ SVG controls Plugin:
     me.initControl = initControl;
     function initControl(theParentSVG, theOptions) {
         this.initPubSub();
-        console.log("init control options", theOptions)
         var dfd = jQuery.Deferred();
         this.colorOffset = 0;
         var tmpThisControl = this;

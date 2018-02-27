@@ -234,6 +234,10 @@ var ActionAppCore = {};
             if (!(theNavObject)) { return false };
             var tmpName = theNavObject.name || '';
             me.navConfig[tmpName] = theNavObject;
+            var tmpOpts = theNavObject.options || {};
+            theNavObject.isSideLink = ( tmpOpts.sideLink );
+            theNavObject.isTopLink = ( tmpOpts.topLink );
+            //theNavObject.isNavLink = ( theNavObject.display == 'primary' );
             me.config.navlinks.push(theNavObject)
             return true;
         }
@@ -242,7 +246,6 @@ var ActionAppCore = {};
             show:true
         }
         me.setMessagesOption = function(theOption, theValue){            
-            console.log("setMessagesOption",theOption, theValue)
             ThisApp._messageOptions[theOption] = theValue
         }
         me.setMessagesOptions = function(theOptions){            
@@ -317,7 +320,6 @@ var ActionAppCore = {};
 
             me.messages.push(tmpMsgObj)
             var tmpIsShow = me._messageOptions.show;
-            console.log("tmpIsShow",tmpIsShow)
             if(typeof(tmpOptions.show) == 'boolean'){
                 tmpIsShow = tmpOptions.show;
             }
@@ -380,7 +382,6 @@ var ActionAppCore = {};
             for( var aKey in theDocs ){
                 var tmpTplName = theTemplateSpecs.templateMap[aKey];
                 if( tmpTplName ){
-                    console.log("tmpTplName",tmpTplName)
                     ThisApp.addTemplate(tmpTplName, theDocs[aKey]); 
                 }
             }
@@ -1128,11 +1129,7 @@ var ActionAppCore = {};
         ThisApp.getByAttr$(tmpSelector, theOptionalTarget).each(function(theIndex) {
           var tmpEl$ = $(this);
           var tmpKey = "" + tmpEl$.attr(tmpAttrName);
-          //--- Add innerHTML to the templates object
-          //me.htmlHandlebars[tmpKey] = "" + this.innerHTML;
           me._templates[tmpKey] = Handlebars.compile(this.innerHTML);          
-          //console.log("Added tmpKey",tmpKey);
-          //--- clear so there is only one
           this.innerHTML = '';
         });
     }
@@ -1366,11 +1363,12 @@ var ActionAppCore = {};
             }
         }
 
-        //--- Standard functionality  ===================================
-        var tmpNavHTML = '{{#each navlinks}} <a appuse="tablinks" group="app:pages" item="{{name}}" appaction="showPage" class="item">{{title}}</a> {{/each}}';
-        ThisApp.addTemplate('tpl-side-menu-item',tmpNavHTML)
+        var tmpNavHTML = '{{#each navlinks}} {{#if isTopLink}}<a appuse="tablinks" group="app:pages" item="{{name}}" appaction="showPage" class="item blue">{{title}}</a>{{/if}} {{/each}}';
+        var tmpSideLinksHTML = '{{#each navlinks}} {{#if isSideLink}}<a appuse="tablinks" group="app:pages" item="{{name}}" appaction="showPage" class="item">{{title}}</a>{{/if}} {{/each}}';
+        ThisApp.addTemplate('tpl-side-menu-item',tmpSideLinksHTML)
+        ThisApp.addTemplate('tpl-nav-menu-item',tmpNavHTML)
         $('[appuse="side-menu"]').html(ThisApp.renderTemplate('tpl-side-menu-item',me.config));
-        $('[appuse="nav-menu"]').html(ThisApp.renderTemplate('tpl-side-menu-item',me.config));
+        $('[appuse="nav-menu"]').html(ThisApp.renderTemplate('tpl-nav-menu-item',me.config));
 
         initMenus();
         initAppActions();
@@ -1447,7 +1445,7 @@ License: MIT
         this.pageTemplates = this.options.pageTemplates || [];
         this.layoutTemplates = this.options.layoutTemplates || false;
 
-        this.linkDisplayOption = this.options.linkDisplayOption || "both"
+        this.navOptions = this.navOptions || this.options.navOptions || {};
         this._activatedFlag = false;
         //this.pageTemplate = this.options.pageTemplate || '';
         this.layoutOptions = this.options.layoutOptions || false;
@@ -1509,10 +1507,14 @@ License: MIT
             }
             this.loadRegion(aName, ThisApp.renderTemplate(tmpLTName, tmpContext));
         }
+        //--- This resizes the layouts with the new content loaded from templates
+        if( typeof(ThisApp.refreshLayouts) == 'function' ){
+            ThisApp.refreshLayouts();
+        }
     }
    
     me.open = function (theOptions) {
-        return ThisApp.gotoPage(this.pageName);p
+        return ThisApp.gotoPage(this.pageName);
     }
     me.focus = me.open;
     
@@ -1554,14 +1556,13 @@ License: MIT
 
         //--- Add dynamic link on init from plugin module
         if (this.app && this.app.$appPageContainer) {
-            this.app.$appPageContainer.append('<div appuse="cards" group="app:pages" item="' + this.pageName + '" class="hidden">' + this.pageTitle + '</div>')
+            this.app.$appPageContainer.append('<div appuse="cards" group="app:pages" item="' + this.pageName + '" class="hidden">' + this.pageTitle + '</div>');
             this.app.registerNavLink({
                 "name": this.pageName,
                 "title": this.pageTitle,
-                "display": this.linkDisplayOption,
+                "options": this.navOptions || {},
                 "onActivate": onActivateThisPage.bind(this)
-            })
-            
+            });
             this.getLayoutHTML = function(){
                 var tmpRet = "";
                 var tmpAll = ['north','south','center', 'east','west'];
@@ -1575,17 +1576,17 @@ License: MIT
                 return tmpRet;
             };
 
-            this.parentEl = this.app.getByAttr$({ group: "app:pages", item: this.pageName })
+            this.parentEl = this.app.getByAttr$({ group: "app:pages", item: this.pageName });
             this.parentEl.html(this.getLayoutHTML());
 
             if (typeof (this._onInit) == 'function') {
                 this._onInit(this.app)
-            }
+            };
 
             if (this.layoutOptions && this.layoutConfig) {
                 this.layoutSpot = ThisApp.getByAttr$({ group: ThisApp.pagesGroup, "item": this.pageName });
                 this.layout = this.layoutSpot.layout(this.layoutConfig);
-            }
+            };
 
         }
 

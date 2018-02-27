@@ -3,32 +3,33 @@ Author: Joseph Francis
 License: MIT
 */
 
-//---  Logs Page module --- --- --- --- --- --- --- --- --- --- --- --- 
+//---  Debug Page module --- --- --- --- --- --- --- --- --- --- --- --- 
+//--- Example of page that is not in the nav, but can be called
 (function (ActionAppCore, $) {
 
     var SiteMod = ActionAppCore.module("site");
     var AppModule = ActionAppCore.module("app");
 
     var thisPageSpecs = {
-        pageName:"LogsPage", 
-        pageTitle: "Logs", 
-        pageNamespace: 'logs',
+        pageName:"DebugPage", 
+        pageTitle: "Debug Logs", 
+        pageNamespace: 'debug',
         navOptions:{
-            topLink:true,
-            sideLink:true
+            topLink:false,
+            sideLink:false
         },
         appModule:AppModule
     };
 
     thisPageSpecs.pageTemplates = {
-        baseURL: 'app/pages/LogsPage/tpl',
+        baseURL: 'app/pages/DebugPage/tpl',
         //-- Page to lookup : name to call it when pulling
         //---  Good to "namespace" your templates with the page prefix to avoid name conflicts
         templateMap:{
             "page-header.html": thisPageSpecs.pageNamespace + ":page-header",
             "page-body.html": thisPageSpecs.pageNamespace + ":page-body",
             "page-footer.html": thisPageSpecs.pageNamespace + ":page-footer",
-            "msg-ctr-item.html": thisPageSpecs.pageNamespace + ":msg-ctr-item"
+            "debug-msg-item.html": thisPageSpecs.pageNamespace + ":msg-ctr-item"
         }
     }
 
@@ -59,10 +60,8 @@ License: MIT
     */
     ThisPage._onPreInit = function(theApp){
         ThisPage.om = theApp.om;
-        console.log("Log Page: _onPreInit ");
     }
     ThisPage._onInit = function() {
-        console.log("Log Page: _onInit");
     }
 
     //=== On Page Activation ===
@@ -73,7 +72,6 @@ License: MIT
     *     that are needed even if the page was not activated yet
     */
     ThisPage._onFirstActivate = function(){
-        console.log("Log Page: _onFirstActivate");
         ThisPage.initOnFirstLoad().then(
             function(){
                 ThisPage._onActivate();
@@ -82,7 +80,6 @@ License: MIT
     }
     
     ThisPage._onActivate = function(){
-        console.log("Log Page: _onActivate");
         ThisPage.refreshMessageCenter();
     }
     //--- End lifecycle hooks
@@ -94,9 +91,9 @@ License: MIT
         return ThisPage.$jobLogs || $('[facet="logs-jobs"]');
     }
     ThisPage.getJobLogTabs = function () {
-        return ThisPage.$jobLogs || $('[facet="logs:job-tabs"]');
+        return ThisPage.$jobLogs || $('[facet="debug:job-tabs"]');
     }
-    //<div action="logs:clearJobLogs" class="ui primary basic button">Added</div>
+    //<div action="debug:clearJobLogs" class="ui primary basic button">Added</div>
 
     ThisPage.addJobLog = function () {
         var tmpBody = ThisPage.getJobLogBody();
@@ -111,11 +108,11 @@ License: MIT
         }
         
 
-        var tmpBodyHTML = '<div appuse="cards" group="logs:job-tabs" item="' + tmpNewJobID + '" style="border:solid 1px red;">' + tmpNew.title + '</div>';
+        var tmpBodyHTML = '<div appuse="cards" group="debug:job-tabs" item="' + tmpNewJobID + '" style="border:solid 1px red;">' + tmpNew.title + '</div>';
         ThisApp.addToFacet('logs-jobs', tmpBodyHTML);
-        var tmpTabHTML = '<div group="logs:job-tabs" item="' + tmpNewJobID + '" class="ui item selected nopad noshadow" action="logs:selectTabLink" appuse="tablinks" group="logs:job-tabs" item="' + tmpNewJobID + '" ><a class="ui site-tab-link-body basic button">Tab long long long long long long long long' + ThisPage.jobLogsAt + '</a><a action="logs:closeSelectedTab" class="" style="padding-left:4px;"><i class="delete icon"></i></a></div>';
+        var tmpTabHTML = '<div group="debug:job-tabs" item="' + tmpNewJobID + '" class="ui item selected nopad noshadow" action="debug:selectTabLink" appuse="tablinks" group="debug:job-tabs" item="' + tmpNewJobID + '" ><a class="ui site-tab-link-body basic button">Tab long long long long long long long long' + ThisPage.jobLogsAt + '</a><a action="debug:closeSelectedTab" class="" style="padding-left:4px;"><i class="delete icon"></i></a></div>';
         //--- Prepend the tab so new is first (param 3 / true)
-        ThisApp.addToFacet('logs:job-tabs', tmpTabHTML, false, true);
+        ThisApp.addToFacet('debug:job-tabs', tmpTabHTML, false, true);
         ThisPage.openJobLink(tmpNewJobID);
        
     }
@@ -126,7 +123,7 @@ License: MIT
     ThisPage.closeSelectedTab = function (theAction, theTarget) {
         var tmpBtn = ($(theTarget).closest('[item]'));
         var tmpAs = ThisApp.getAttrs(tmpBtn, ['group', 'item']);
-        var tmpParent = $('[facet="logs:job-tabs"]');
+        var tmpParent = $('[facet="debug:job-tabs"]');
         var tmpSelectedItem = tmpParent.find('[appuse="tablinks"].primary');
         var tmpID = $(tmpSelectedItem.get(0)).attr('item');
         
@@ -179,7 +176,7 @@ License: MIT
 
     ThisPage.openJobLink = function (theJobId) {
         var tmpSpecs = {
-            group: 'logs:job-tabs',
+            group: 'debug:job-tabs',
             item: theJobId
         };
         ThisPage.openJobLinkTab(tmpSpecs);
@@ -200,10 +197,11 @@ License: MIT
     ThisPage.test = test;
     function test() {
         alert('test')
+
     }
 
     ThisPage.runTest = function(){
-        ThisApp.gotoPage('DebugPage')
+        ThisApp.gotoPage('LogsPage');
     }
 
     ThisPage.clearMessageCenter = clearMessageCenter;
@@ -224,7 +222,7 @@ License: MIT
     ThisPage.refreshMessageCenter = refreshMessageCenter;
     function refreshMessageCenter() {
         var tmpContext = {messages:ThisApp.getMessages()}
-        $('[facet="logs-messages"]').html(ThisApp.renderTemplate('logs:msg-ctr-item', tmpContext));
+        $('[facet="logs-messages"]').html(ThisApp.renderTemplate('debug:msg-ctr-item', tmpContext));
     }
 
         
