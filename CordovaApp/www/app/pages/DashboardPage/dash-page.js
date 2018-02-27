@@ -116,11 +116,11 @@ License: MIT
                 me.wsHome = me._svg.getNewWorkpace();
                 me.wsHome.init({ svg: tmpHomeWsEl[0], viewBox: {x: 0, y: 0, w: 700, h: 700} });
 
-                me.wsHome.addControl('icon-database', 'icon-database', {scale: 1 }).then(function(theControl){
+                me.wsHome.addControl('icon-database1', 'icon-database', {scale: 1 }).then(function(theControl){
                     me.wsDatabaseIcon = theControl;
                 });
-                me.wsHome.addControl('icon-database2', 'icon-database', {scale: 1, translateY:120 }).then(function(theControl){
-                    me.wsDatabaseIcon2 = theControl;
+                me.wsHome.addControl('on-off-g-r1', 'on-off-g-r', {scale: 2, translateY:220, translateX:60 }).then(function(theControl){
+                    me.onOffButton1 = theControl;
                 });
 
             }
