@@ -1635,10 +1635,10 @@ License: MIT
         if (!this._activatedFlag) {
             this._activatedFlag = true;
             if(typeof(this._onFirstActivate) == 'function'){
-                this._onFirstActivate();
+                this._onFirstActivate(this.app);
             }
         } else if(typeof(this._onActivate) == 'function'){
-            this._onActivate();
+            this._onActivate(this.app);
         }
     }
     

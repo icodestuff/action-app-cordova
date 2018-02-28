@@ -86,12 +86,14 @@ License: MIT
     }
 
     ThisPage._onInit = function(theApp) {
-        ThisPage._svg = theApp.getComponent("plugin:SvgControls");
-        ThisPage._om = theApp.om;
+        
         
     }
 
     ThisPage._onFirstActivate = function(theApp) {
+        ThisPage._svg = theApp.getComponent("plugin:SvgControls");
+        ThisPage._om = theApp.om;
+
         var tmpThis = this;
         ThisPage.initOnFirstLoad().then(
             function(){
