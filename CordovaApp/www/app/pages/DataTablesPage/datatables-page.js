@@ -69,13 +69,76 @@ License: MIT
         return tmpRet;
     }
 
+    ThisPage.sessionsSelected = function(theTable, theIndexes){
+        var tmpKeyField = 'id';
+        ThisPage.dt.runForIndexMatches(theTable,theIndexes, function(theDoc, thePos){
+            var tmpID = theDoc[tmpKeyField];
+            if( tmpID ){
+                console.log("Selected",tmpID);
+                // var tmpEls = ThisPage.getByAttr$({group:'dts:session-card', item:tmpID});
+                // if( !(tmpEls) || tmpEls.length < 1){
+                //     ThisApp.addToFacet('dts:session-details-out', theDoc, 'dts:session-card-fluid',true);
+                // } else {
+                //     console.log("already there")
+                // }
+                
+            }
+        })
+        refreshSessionsOutHeader();    
+    }
+
+    ThisPage.sessionsDeselected = function(theTable, theIndexes){
+        var tmpKeyField = 'id';
+        ThisPage.dt.runForIndexMatches(theTable,theIndexes, function(theData, thePos){            
+            var tmpID = theData[tmpKeyField];
+            console.log("Deselected",tmpID);
+            if( tmpID ){
+                var tmpEls = ThisPage.getByAttr$({group:'dts:session-card', item:tmpID}, ThisApp.getFacet$('dts:session-details-out'))
+                tmpEls.remove();
+            }
+        })    
+        refreshSessionsOutHeader();
+    }
+
+    ThisPage.clearSessionCards = function(){
+        // var tmpEls = ThisPage.getByAttr$({group:'dts:session-card'}, ThisApp.getFacet$('dts:session-details-out'))
+        // tmpEls.remove();
+        refreshSessionsOutHeader();
+    }
+
+    function refreshSessionsOutHeader(){
+        console.log("Clear");
+        // if( ThisPage.currentSessionTable == null){
+        //     ThisApp.loadFacet("dts:session-details-header", 'Click "Read All Documents" to load a table')
+        // } else {
+        //     var tmpSelected = ThisPage.currentSessionTable.rows( { selected: true } );
+
+        //     var tmpSelectedCount = 0;
+        //     if( tmpSelected && tmpSelected.count() ){
+        //         tmpSelectedCount = tmpSelected.count();
+        //     }
+        //     var tmpDeSelectAllBtn = ThisPage.getByAttr$({action:"dts:closeAllSessionCards"});
+        //     if( tmpSelectedCount == 0){
+        //         tmpDeSelectAllBtn.addClass('disabled');
+        //         ThisApp.loadFacet("dts:session-details-header", 'Select an item from the list, it will show here.')
+        //     } else {
+        //         tmpDeSelectAllBtn.removeClass('disabled');
+        //         ThisApp.loadFacet("dts:session-details-header", 'Now showing <b>' + tmpSelectedCount + ' session' + (tmpSelectedCount > 1 ? 's' : '') + '.')
+        //     }
+        //     //console.log("tmpSelectedCount",tmpSelectedCount,tmpSelected);
+        // }
+        
+    }
+
+    ThisPage.currentSessionTable = null;
+    
     ThisPage.runTest = function(){
         var tmpOut = "Testing";
         ThisPage._om.getObject('[get]:app/app-data','session-data.json').then(function(theDoc){
             //ThisPage.writeToOut(JSON.stringify(theDoc));
             var tmpData = ThisPage.transformDocs(theDoc.rows);
 
-            var tmpTableEl = ThisPage._dt.addTable('dts:home-output');
+            var tmpTableEl = ThisPage.dt.addTable('dts:home-output');
                 var tmpNewTable = tmpTableEl.DataTable({
                     data: tmpData.data,
                     responsive: {
@@ -107,6 +170,25 @@ License: MIT
                         { "title": "Session", "data": "session" }
                     ]
                 });
+
+                $(tmpTableEl.find('.checkbox')).checkbox();
+    
+                tmpNewTable
+                    .on('select', function (e, dt, type, indexes) {
+                        ThisPage.dt.onCheckboxSelect(e, dt, type, indexes, tmpNewTable, tmpTableEl)
+                        ThisPage.sessionsSelected(tmpNewTable, indexes);
+                    })
+                    .on('deselect', function (e, dt, type, indexes) {
+                        ThisPage.dt.onCheckboxDeselect(e, dt, type, indexes, tmpNewTable, tmpTableEl)
+                        ThisPage.sessionsDeselected(tmpNewTable, indexes);
+                    });
+    
+                ThisPage.currentSessionTable = tmpNewTable;
+    
+    
+                ThisApp.appMessage("Loaded Data","i",{show:true});
+    
+
 
          })
     }
@@ -146,7 +228,7 @@ License: MIT
     ThisPage._onInit = function(theApp) {
         ThisPage._svg = theApp.getComponent("plugin:SvgControls");
         ThisPage._om = theApp.om;
-        ThisPage._dt = theApp.getComponent("plugin:DataTables");        
+        ThisPage.dt = theApp.getComponent("plugin:DataTables");        
     }
 
     ThisPage._onFirstActivate = function(theApp) {
