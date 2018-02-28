@@ -131,6 +131,10 @@ License: MIT
                 me.wsHome.addControl('btn-round-glossy3', 'btn-round-glossy', {scale: .25, translateY:300, translateX:260, states:{switchColor:'#00ffff',switchStatus:true} }).then(function(theControl){
                     me.roundGlossyButton3 = theControl;
                 });
+                me.wsHome.addControl('color-bar-main', 'color-bar', {scale: .4, translateY:20, translateX:150, states:{switchColor:'#00ffff',switchStatus:true} }).then(function(theControl){
+                    me.roundGlossyButton3 = theControl;
+                });
+                
                 
 
             }
