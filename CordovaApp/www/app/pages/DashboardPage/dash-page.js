@@ -114,7 +114,7 @@ License: MIT
 
                 var tmpHomeWsEl = me.getByAttr$({ facet: "dash:home-ws" });
                 me.wsHome = me._svg.getNewWorkpace();
-                me.wsHome.init({ svg: tmpHomeWsEl[0], viewBox: {x: 0, y: 0, w: 700, h: 700} });
+                me.wsHome.init({ svg: tmpHomeWsEl[0], viewBox: {x: 0, y: 0, w: 500, h: 500} });
 
                 me.wsHome.addControl('icon-database1', 'icon-database', {scale: 1 }).then(function(theControl){
                     me.wsDatabaseIcon = theControl;
@@ -122,6 +122,16 @@ License: MIT
                 me.wsHome.addControl('on-off-g-r1', 'on-off-g-r', {scale: 2, translateY:220, translateX:60 }).then(function(theControl){
                     me.onOffButton1 = theControl;
                 });
+                me.wsHome.addControl('btn-round-glossy1', 'btn-round-glossy', {scale: .25, translateY:300, translateX:60, states:{switchColor:'#ff00ff',switchStatus:true} }).then(function(theControl){
+                    me.roundGlossyButton = theControl;
+                });
+                me.wsHome.addControl('btn-round-glossy2', 'btn-round-glossy', {scale: .25, translateY:300, translateX:160, states:{switchColor:'#ffff00',switchStatus:true} }).then(function(theControl){
+                    me.roundGlossyButton2 = theControl;
+                });
+                me.wsHome.addControl('btn-round-glossy3', 'btn-round-glossy', {scale: .25, translateY:300, translateX:260, states:{switchColor:'#00ffff',switchStatus:true} }).then(function(theControl){
+                    me.roundGlossyButton3 = theControl;
+                });
+                
 
             }
         );
