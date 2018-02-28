@@ -152,6 +152,14 @@ License: MIT
                         'selector': 'td:not(.control)'
                      },
                     order: [[1, 'asc']],
+                    buttons: [
+                        'copy',
+                        'excel',
+                        'csv',
+                        'pdf',
+                        'print'
+                    ],
+                    dom: 'Bfrtip',
                     columnDefs: [ {
                         'data': null,
                         'defaultContent': '',
